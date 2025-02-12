@@ -85,7 +85,7 @@ class ProductController extends BaseController
         }
    
         $product->name = $input['name'];
-        $product->detail = $input['description'];
+        $product->description = $input['description'];
         $product->save();
    
         return $this->sendResponse(new ProductResource($product), 'Product updated successfully.');
