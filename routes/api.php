@@ -18,6 +18,8 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::resource('products', ProductController::class);
 });
 
+Route::middleware('auth:sanctum')->get('/user/profile', [UserController::class, 'profile']);
+
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
 Route::post('/users', [UserController::class, 'store']);

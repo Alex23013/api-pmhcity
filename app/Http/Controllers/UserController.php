@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -23,6 +24,16 @@ class UserController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'User found successfully',
+            'data' => $user
+        ], 200);
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        return response()->json([
+            'status' => true,
+            'message' => 'User profile retrieved successfully',
             'data' => $user
         ], 200);
     }
