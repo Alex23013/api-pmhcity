@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
    
 class RegisterController extends BaseController
 {
@@ -50,6 +51,7 @@ class RegisterController extends BaseController
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
             $success['name'] =  $user->name;
+            Log::info('Test logs');
    
             return $this->sendResponse($success, 'User login successfully.');
         } 
