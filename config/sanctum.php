@@ -24,23 +24,11 @@ return [
     ))),
     */
 
-    'stateful' => function () {
-        $requestOrigin = request()->header('Origin');
-
-        // List of default allowed origins
-        $allowedOrigins = [
-            'https://app-dev.pmhcity.com',
-            'http://localhost:3000',
-            'http://127.0.0.1:8000'
-        ];
-
-        // If the origin is not already allowed, add it dynamically
-        if ($requestOrigin && !in_array($requestOrigin, $allowedOrigins)) {
-            $allowedOrigins[] = $requestOrigin;
-        }
-
-        return $allowedOrigins;
-    },
+    'stateful' => [
+        'https://app-dev.pmhcity.com',
+        'http://localhost:3000',
+        'http://127.0.0.1:8000'
+    ],
     /*
     |--------------------------------------------------------------------------
     | Sanctum Guards
