@@ -156,7 +156,7 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN',null),
+    'domain' => env('SESSION_DOMAIN','9000-idx-pmh-city-frontend-1739676879847.cluster-qhrn7lb3szcfcud6uanedbkjnm.cloudworkstations.dev'),
 
     /*
     |--------------------------------------------------------------------------
