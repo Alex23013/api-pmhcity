@@ -14,10 +14,10 @@ class DynamicSanctumDomains
         $origin = $request->header('Origin');
         $allowedDomains = Config::get('sanctum.stateful', []);
 
-        /*dd('DynamicSanctumDomains Middleware Called', [
+        Log::info('DynamicSanctumDomains Middleware Called', [
             'origin' => $origin,
             'before' => $allowedDomains,
-        ]);*/
+        ]);
 
         // If the origin is valid and not already in the list, add it
         if ($origin && !in_array($origin, $allowedDomains, true)) {
