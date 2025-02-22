@@ -14,7 +14,7 @@ class DynamicSanctumDomains
         $origin = $request->header('Origin');
         $allowedDomains = Config::get('sanctum.stateful', []);
 
-        Log::info('DynamicSanctumDomains Middleware Called', [
+        dd('DynamicSanctumDomains Middleware Called', [
             'origin' => $origin,
             'before' => $allowedDomains,
         ]);
