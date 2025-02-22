@@ -18,9 +18,8 @@ Route::controller(RegisterController::class)->group(function(){
 Route::middleware('auth:sanctum')->group( function () {
     Route::resource('products', ProductController::class);
     Route::resource('notifications', NotificationController::class);
+    Route::get('profile', [UserController::class, 'profile']);
 });
-
-Route::middleware('auth:sanctum')->get('profile', [UserController::class, 'profile']);
 
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
