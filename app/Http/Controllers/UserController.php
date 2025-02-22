@@ -31,11 +31,7 @@ class UserController extends Controller
 
     public function profile()
     {
-        Log::info('Profile endpoint before Auth');
         $user = Auth::user();
-        Log::info('Profile endpoint', [
-            'origin' => $user,
-        ]);
         return response()->json([
             'status' => true,
             'message' => 'User profile retrieved successfully',
