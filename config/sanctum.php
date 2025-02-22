@@ -14,7 +14,7 @@ return [
     | and production domains which access your API via a frontend SPA.
     |
     */
-
+    /*
     'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
         '%s%s',
         'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
@@ -22,7 +22,25 @@ return [
         'pmhcity-preview.angeljsd.dev',
         '9000-idx-pmh-city-frontend-1739676879847.cluster-qhrn7lb3szcfcud6uanedbkjnm.cloudworkstations.dev'
     ))),
+    */
 
+    'stateful' => function () {
+        $requestOrigin = request()->header('Origin');
+
+        // List of default allowed origins
+        $allowedOrigins = [
+            'https://app-dev.pmhcity.com',
+            'http://localhost:3000',
+            'http://127.0.0.1:8000'
+        ];
+
+        // If the origin is not already allowed, add it dynamically
+        if ($requestOrigin && !in_array($requestOrigin, $allowedOrigins)) {
+            $allowedOrigins[] = $requestOrigin;
+        }
+
+        return $allowedOrigins;
+    },
     /*
     |--------------------------------------------------------------------------
     | Sanctum Guards
