@@ -18,6 +18,18 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'price'=>$this->price,
+            'category' => $this->category ? [
+                'id' => $this->category->id,
+                'name' => $this->category->name,
+            ] : null,
+            'subcategory' => $this->subcategory ? [
+                'id' => $this->subcategory->id,
+                'name' => $this->subcategory->name,
+            ] : null,
+            'photos' => $this->photoProducts ? $this->photoProducts->map(function ($photo) {
+                return asset('storage/' . $photo->url);
+            }) : [],
             'created_at' => $this->created_at->format('d/m/Y'),
             'updated_at' => $this->updated_at->format('d/m/Y'),
         ];
