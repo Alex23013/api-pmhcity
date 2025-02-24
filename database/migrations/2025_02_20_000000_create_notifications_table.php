@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
-            $table->id();
-            $table->integer('receptor_id');
-            $table->string('author_name');
-            $table->string('message');
-            $table->string('type');
-            $table->boolean('read')->default(false);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('notifications')) {
+            Schema::create('notifications', function (Blueprint $table) {
+                $table->id();
+                $table->integer('receptor_id');
+                $table->string('author_name');
+                $table->string('message');
+                $table->string('type');
+                $table->boolean('read')->default(false);
+                $table->timestamps();
+            });
+        }
     }
 
     /**
