@@ -9,7 +9,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\NotificationController;
-   
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\SubcategoryController;
+use App\Http\Controllers\API\MetropoleController;
+use App\Http\Controllers\CityController;
+use App\Models\Metropole;
+
 Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
     Route::post('login', 'login');
@@ -18,7 +23,16 @@ Route::controller(RegisterController::class)->group(function(){
 Route::middleware('auth:sanctum')->group( function () {
     Route::resource('products', ProductController::class);
     Route::resource('notifications', NotificationController::class);
+    
     Route::get('profile', [UserController::class, 'profile']);
+    Route::get('categories/names', [CategoryController::class, 'listNames']);
+    Route::get('metropoles/names', [MetropoleController::class, 'listNames']);
+    Route::get('metropoles/{id}/cities', [CityController::class, 'getCitiesByMetropole']);
+
+    Route::resource('categories', CategoryController::class);
+    Route::resource('metropoles', MetropoleController::class);
+    Route::apiResource('subcategories', SubcategoryController::class);
+    Route::apiResource('cities', CityController::class);
 });
 
 Route::get('/users', [UserController::class, 'index']);
