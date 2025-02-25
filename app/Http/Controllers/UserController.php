@@ -32,14 +32,19 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::user();
+        $user->store;
+        $user->role;
+        $user->city->metropole;
         return response()->json([
             'status' => true,
             'message' => 'User profile retrieved successfully',
-            'data' => $user
+            'data' => [
+                'user' => $user
+            ]
         ], 200);
     }
 
-    public function store(Request $request)
+    public function store(Request $request) //not used: evalute for deprecation
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -64,9 +69,11 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:Users,email,' . $id,
+            'lastname' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
         ]);
 
         if ($validator->fails()) {
@@ -76,7 +83,6 @@ class UserController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-
         $user = User::findOrFail($id);
         $user->update($request->all());
 
