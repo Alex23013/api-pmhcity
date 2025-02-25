@@ -13,7 +13,7 @@ use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubcategoryController;
 use App\Http\Controllers\API\MetropoleController;
 use App\Http\Controllers\CityController;
-use App\Models\Metropole;
+use App\Http\Controllers\API\StoreController;
 
 Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
@@ -33,6 +33,9 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::resource('metropoles', MetropoleController::class);
     Route::apiResource('subcategories', SubcategoryController::class);
     Route::apiResource('cities', CityController::class);
+
+    Route::put('stores/{id}/verified', [StoreController::class, 'markAsVerifiedStore']);
+    Route::post('stores/verification', [StoreController::class, 'verifyStore']);
 });
 
 Route::get('/users', [UserController::class, 'index']);
