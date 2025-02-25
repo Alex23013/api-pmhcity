@@ -8,11 +8,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Product;
+use App\Models\Role;
+use App\Models\Store;
+use App\Models\City;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
+
+    protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -21,10 +26,13 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'lastname',
         'email',
         'password',
+        'role_id',
+        'profile_status'
     ];
-
+            
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -51,5 +59,20 @@ class User extends Authenticatable
     public function products()
     {
         return $this->hasMany(Product::class,'product_id');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class,'role_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class,'city_id');
+    }
+
+    public function store()
+    {
+        return $this->hasOne(Store::class, 'user_id');
     }
 }

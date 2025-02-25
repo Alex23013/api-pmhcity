@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Store;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -21,9 +22,11 @@ class RegisterController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users|max:255',
             'password' => 'required',
             'c_password' => 'required|same:password',
+            'role_id' => 'required|exists:roles,id',
         ]);
    
 
@@ -34,6 +37,7 @@ class RegisterController extends BaseController
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
+        Store::create(['user_id' => $user->id]);
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;
    
@@ -51,7 +55,6 @@ class RegisterController extends BaseController
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
             $success['name'] =  $user->name;
-            $success['name1'] =  $user->name;
    
             return $this->sendResponse($success, 'User login successfully.');
         } 
