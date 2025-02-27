@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservation_details', function (Blueprint $table) {
+        Schema::create('reservation_steps', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('reservation_id')->index(); 
             $table->unsignedBigInteger('reservation_status_id')->index(); 
