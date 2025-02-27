@@ -13,9 +13,10 @@ class DatabaseSeeder extends Seeder
     {
         /*
         $this->call(RoleSeeder::class);
-        $this->call(CategorySeeder::class);
         $this->call(MetropoleSeeder::class);
-        $this->call(ReservationStatusSeeder::class);
         */
+        $this->call(CategorySeeder::class);
+        $this->call(ReservationStatusSeeder::class);
+        $this->call(DataProductSeeder::class);
     }
 }

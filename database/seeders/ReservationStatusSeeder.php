@@ -15,14 +15,14 @@ class ReservationStatusSeeder extends Seeder
         $statuses = [
             ['name' => 'created', 'display_name' => 'créé'],
             ['name' => 'accepted', 'display_name' => 'accepté'],
-            ['name' => 'canceled', 'display_name' => 'annulé'],
+            ['name' => 'declined', 'display_name' => 'annulé'],
             ['name' => 'payed', 'display_name' => 'payé'],
             ['name' => 'in transit', 'display_name' => 'en transit'],
             ['name' => 'delivered', 'display_name' => 'livré'],
         ];
 
         foreach ($statuses as $status) {
-            ReservationStatus::updateOrCreate(['name' => $status['name']], $status);
+            ReservationStatus::firstOrCreate(['name' => $status['name']], $status);
         }
     }
 }
