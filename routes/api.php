@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\ReservationController;
 
 
 use App\Http\Controllers\API\RegisterController;
@@ -22,7 +22,7 @@ Route::controller(RegisterController::class)->group(function(){
          
 Route::middleware('auth:sanctum')->group( function () {
     Route::resource('products', ProductController::class);
-    Route::resource('notifications', NotificationController::class);
+    Route::resource('notifications', NotificationController::class)->except(['destroy']);
     
     Route::get('profile', [UserController::class, 'profile']);
     Route::get('categories/names', [CategoryController::class, 'listNames']);
@@ -36,6 +36,12 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::put('stores/{id}/verified', [StoreController::class, 'markAsVerifiedStore']);
     Route::post('stores/verification', [StoreController::class, 'verifyStore']);
+
+    Route::get('reservations/{id}/details', [ReservationController::class, 'showSteps']);
+    Route::get('reservations', [ReservationController::class, 'index']);
+    Route::post('reservations', [ReservationController::class, 'store']);
+    Route::post('reservations/update-status', [ReservationController::class, 'updateStatus']);
+
 });
 
 Route::get('/users', [UserController::class, 'index']);
