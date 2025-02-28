@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('comment')->nullable();
             $table->unsignedBigInteger('size_id')->nullable();
             $table->integer('quantity');
-            //TODO: add color depending on how frontend will handle it
 
             $table->foreignId('buyer_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('seller_id')->constrained('users')->cascadeOnDelete();
