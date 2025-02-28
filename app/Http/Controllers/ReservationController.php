@@ -20,12 +20,12 @@ class ReservationController extends Controller
         $auth_role = $user->role_id;
         if($auth_role == 4) {
             $reservations = Reservation::where('buyer_id', $user->id)
-                ->with(['buyer', 'seller'])
+                ->with(['buyer', 'seller','product'])
                 ->latest()
                 ->get();
         } else { // role 2 or 3 (sellers)
             $reservations = Reservation::where('seller_id', $user->id)
-                ->with(['buyer', 'seller'])
+                ->with(['buyer', 'seller','product'])
                 ->latest()
                 ->get();
         }

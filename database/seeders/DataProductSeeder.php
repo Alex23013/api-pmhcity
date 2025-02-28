@@ -45,7 +45,7 @@ class DataProductSeeder extends Seeder
         }
 
         // Seed StatusProduct
-        $statusProducts = ['Neuf', 'Très bon état'];
+        $statusProducts = ['Neuf', 'Très bon état','Bon'];
         foreach ($statusProducts as $status) {
             StatusProduct::firstOrCreate(['name' => $status]);
         }

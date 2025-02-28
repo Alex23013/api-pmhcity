@@ -43,21 +43,39 @@ class ProductController extends BaseController
             'category_id' => 'required|exists:categories,id',
             'subcategory_id' => 'required|exists:subcategories,id',
             'is_active' => 'required',
+            'material_id' => 'nullable|exists:materials,id',
+            'brand_id' => 'nullable|exists:brands,id',
+            'status_product_id' => 'nullable|exists:status_products,id',
             'photo1' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'photo2' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'photo3' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo4' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo5' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo6' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
    
-        $product = Product::create($request->only([
-            'name', 'description', 'user_id', 'price', 'category_id', 'subcategory_id', 'is_active'
-        ]));
+        $productData = $request->only([
+            'name', 'description', 'user_id', 'price', 'category_id', 'subcategory_id', 'is_active', 'brand_id', 'status_product_id'
+        ]);
+    
+        // Add material_id if it is present and not null
+        if ($request->has('material_id') && !is_null($request->material_id)) {
+            $productData['material_id'] = $request->material_id;
+        }
+
+        //dd($request->input('size_ids'));
+        
+        $productData['size_ids'] = json_encode($request->input('size_ids'));
+        $productData['color_ids'] = json_encode($request->input('color_ids'));    
+
+        $product = Product::create($productData);
 
         // Handle photo uploads
-        $photos = ['photo1', 'photo2', 'photo3'];
+        $photos = ['photo1', 'photo2', 'photo3', 'photo4', 'photo5', 'photo6'];
         foreach ($photos as $photo) {
             if ($request->hasFile($photo)) {
                 $imagePath = $request->file($photo)->store('product_photos', 'public'); // Store in storage/app/public/product_photos
@@ -106,6 +124,7 @@ class ProductController extends BaseController
         $input = $request->all();
    
         $validator = Validator::make($input, [
+            'product_id' => 'required',
             'name' => 'required',
             'description' => 'required',
             'user_id' => 'required|exists:users,id',
@@ -113,12 +132,18 @@ class ProductController extends BaseController
             'category_id' => 'required|exists:categories,id',
             'subcategory_id' => 'required|exists:subcategories,id',
             'is_active' => 'required',
+            'material_id' => 'nullable|exists:materials,id',
+            'brand_id' => 'nullable|exists:brands,id',
+            'status_product_id' => 'nullable|exists:status_products,id'
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-   
+        $product = Product::find($input['product_id']);
+        if (is_null($product)) {
+            return $this->sendError('Product not found.');
+        }
         $product->name = $input['name'];
         $product->description = $input['description'];
         $product->user_id = $input['user_id'];
@@ -126,13 +151,21 @@ class ProductController extends BaseController
         $product->category_id = $input['category_id'];
         $product->subcategory_id = $input['subcategory_id'];
         $product->is_active = $input['is_active'];
+        $product->material_id = $input['material_id']?? null; # TODO: only optional
+        $product->brand_id = $input['brand_id']?? null;
+        $product->status_product_id = $input['status_product_id']?? null;
+        $product->size_ids = json_encode($input['size_ids'] ?? []);
+        $product->color_ids = json_encode($input['color_ids'] ?? []);
+        $product->updated_at = now();
         $product->save();
 
+        $product->photoProducts()->delete();
+
         // Handle photo uploads
-        $photos = ['photo1', 'photo2', 'photo3'];
+        $photos = ['photo1', 'photo2', 'photo3','photo4', 'photo5', 'photo6'];
         foreach ($photos as $photo) {
             if ($request->hasFile($photo)) {
-                $imagePath = $request->file($photo)->store('product_photos', 'public'); // Store in storage/app/public/product_photos
+                $imagePath = $request->file($photo)->store('product_photos', 'public');
 
                 // Create PhotoProduct record
                 PhotoProduct::create([
