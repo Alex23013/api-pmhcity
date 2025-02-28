@@ -10,6 +10,46 @@ use App\Models\Store;
 
 class StoreController extends BaseController
 {
+    public function listStores()
+    {
+        $sellers = User::whereIn('role_id', [2, 3])->get();
+
+        $stores = [];
+        foreach ($sellers as $seller) {
+            $store = $seller->store;
+            if ($store) {
+                $stores[] = $store;
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Stores retrieved successfully.',
+            'data' => $stores
+        ], 200);
+    }
+
+    public function listProductsByStore($storeId)
+    {
+        $store = Store::find($storeId);
+        if (!$store) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Store not found.'
+            ], 404);
+        }
+
+        $user = $store->user;
+
+        $products = $user->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory'])->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Products retrieved successfully.',
+            'data' => $products
+        ], 200);
+    }
+
     public function verifyStore(Request $request)
     {
         $request->validate([

@@ -50,7 +50,9 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::put('stores/{id}/verified', [StoreController::class, 'markAsVerifiedStore']);
     Route::post('stores/verification', [StoreController::class, 'verifyStore']);
-
+    Route::get('stores', [StoreController::class, 'listStores']);
+    Route::get('stores/{id}/products', [StoreController::class, 'listProductsByStore']);
+    
     Route::get('reservations/{id}/details', [ReservationController::class, 'showSteps']);
     Route::get('reservations', [ReservationController::class, 'index']);
     Route::post('reservations', [ReservationController::class, 'store']);
