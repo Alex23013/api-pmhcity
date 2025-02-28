@@ -12,8 +12,15 @@ use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubcategoryController;
 use App\Http\Controllers\API\MetropoleController;
+use App\Http\Controllers\API\ColorController;
+use App\Http\Controllers\API\BrandController;
+use App\Http\Controllers\API\SizeController;
+use App\Http\Controllers\API\StatusProductController;
+use App\Http\Controllers\API\MaterialController;
+
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\API\StoreController;
+use App\Models\StatusProduct;
 
 Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
@@ -21,7 +28,8 @@ Route::controller(RegisterController::class)->group(function(){
 });
          
 Route::middleware('auth:sanctum')->group( function () {
-    Route::resource('products', ProductController::class);
+    Route::resource('products', ProductController::class)->except(['update']);
+    Route::post('products/edit', [ProductController::class, 'update']);
     Route::resource('notifications', NotificationController::class)->except(['destroy']);
     
     Route::get('profile', [UserController::class, 'profile']);
@@ -31,6 +39,12 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::resource('categories', CategoryController::class);
     Route::resource('metropoles', MetropoleController::class);
+    Route::resource('colors', ColorController::class);
+    Route::resource('brands', BrandController::class);
+    Route::resource('status-products', StatusProductController::class);
+    Route::resource('sizes', SizeController::class);
+    Route::resource('materials', MaterialController::class);
+
     Route::apiResource('subcategories', SubcategoryController::class);
     Route::apiResource('cities', CityController::class);
 

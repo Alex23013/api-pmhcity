@@ -31,6 +31,20 @@ class ProductResource extends JsonResource
             'photos' => $this->photoProducts ? $this->photoProducts->map(function ($photo) {
                 return asset('storage/' . $photo->url);
             }) : [],
+            'brand_id'=>$this->brand_id? [
+                'id' => $this->brand->id,
+                'name' => $this->brand->name,
+            ] : null,
+            'material_id'=>$this->material_id? [
+                'id' => $this->material->id,
+                'name' => $this->material->name,
+            ] : null,
+            'status_product_id'=>$this->status_product_id? [
+                'id' => $this->status_product->id,
+                'name' => $this->status_product->name,
+            ] : null,
+            'size_ids'=>$this->size_ids,
+            'color_ids'=>$this->color_ids,
             'created_at' => $this->created_at->format('d/m/Y'),
             'updated_at' => $this->updated_at->format('d/m/Y'),
         ];
