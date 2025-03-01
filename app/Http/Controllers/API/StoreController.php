@@ -18,7 +18,14 @@ class StoreController extends BaseController
         foreach ($sellers as $seller) {
             $store = $seller->store;
             if ($store) {
-                $stores[] = $store;
+                $stores[] = [
+                    "store-name" =>$store,
+                    'seller' => [
+                        "phone" => $seller->phone,
+                        "city" => $seller->city->name,
+                        "metropole" => $seller->city->metropole->name,
+                        ]
+                ];
             }
         }
 
