@@ -19,12 +19,12 @@ class StoreController extends BaseController
             $store = $seller->store;
             if ($store) {
                 $stores[] = [
-                    "store-name" =>$store,
-                    'seller' => [
-                        "phone" => $seller->phone,
-                        "city" => $seller->city->name,
-                        "metropole" => $seller->city->metropole->name,
-                        ]
+                    "store" =>[
+                        "id" => $store->id,
+                        "name" => $store->name,
+                        "logo" => $store->logo,
+                        "subtitle"=> "store description",
+                    ],
                 ];
             }
         }
@@ -53,7 +53,17 @@ class StoreController extends BaseController
         return response()->json([
             'status' => true,
             'message' => 'Products retrieved successfully.',
-            'data' => $products
+            'data' => [
+                'products' => $products,
+                'store' => [
+                        "logo" => $user->profile_picture,
+                        "name" => $store->name,
+                        "phone" => $user->phone,
+                        "city" => $user->city->name,
+                        "metropole" => $user->city->metropole->name,
+                        "banner" => $store->logo,
+                        ]
+                ]
         ], 200);
     }
 
