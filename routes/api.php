@@ -52,6 +52,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('stores/verification', [StoreController::class, 'verifyStore']);
     Route::get('stores', [StoreController::class, 'listStores']);
     Route::get('stores/{id}/products', [StoreController::class, 'listProductsByStore']);
+    Route::post('stores/{id}/edit', [StoreController::class, 'update']);
     
     Route::get('reservations/{id}/details', [ReservationController::class, 'showSteps']);
     Route::get('reservations', [ReservationController::class, 'index']);
@@ -63,7 +64,7 @@ Route::middleware('auth:sanctum')->group( function () {
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
 Route::post('/users', [UserController::class, 'store']);
-Route::put('/users/{id}', [UserController::class, 'update']);
+Route::post('/users/{id}/edit', [UserController::class, 'update']);
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
 
