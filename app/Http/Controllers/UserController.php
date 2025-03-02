@@ -35,11 +35,19 @@ class UserController extends Controller
         $user->store;
         $user->role;
         $user->city->metropole;
+        $monthly_earnings = 10.00;
+        if($monthly_earnings > 300){
+            $require_verification = true;
+        }else{
+            $require_verification = false;
+        }
         return response()->json([
             'status' => true,
             'message' => 'User profile retrieved successfully',
             'data' => [
-                'user' => $user
+                'user' => $user,
+                'monthly_earnings' => $monthly_earnings,
+                'require_verification' => $require_verification
             ]
         ], 200);
     }
