@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Store;
+use App\Models\Category;
+use Illuminate\Support\Facades\Validator;
 
 class StoreController extends BaseController
 {
@@ -16,6 +18,19 @@ class StoreController extends BaseController
 
         $stores = [];
         foreach ($sellers as $seller) {
+            // Eager load related models
+            $products = $seller->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory'])->get();
+
+            // Get unique category IDs from the user's products
+            $categoryIds = $products->pluck('category_id')->unique()->toArray();
+
+            // Randomly select 3 category IDs
+            $randomCategoryIds = collect($categoryIds)->random(min(3, count($categoryIds)));
+
+            // Retrieve the category details for the selected category IDs
+            $category_names = Category::whereIn('id', $randomCategoryIds)->pluck('name')->toArray();
+            $category_names_string = implode(', ', $category_names);
+
             $store = $seller->store;
             if ($store) {
                 $stores[] = [
@@ -23,7 +38,7 @@ class StoreController extends BaseController
                         "id" => $store->id,
                         "name" => $store->name,
                         "logo" => $store->logo,
-                        "subtitle"=> "store description",
+                        "subtitle"=> $category_names_string,
                     ],
                 ];
             }
@@ -32,7 +47,9 @@ class StoreController extends BaseController
         return response()->json([
             'status' => true,
             'message' => 'Stores retrieved successfully.',
-            'data' => $stores
+            'data' => [
+                "stores" => $stores
+            ]
         ], 200);
     }
 
@@ -121,6 +138,48 @@ class StoreController extends BaseController
         return response()->json([
             'status' => true,
             'message' => 'Store verified successfully.',
+            'data' => $store
+        ], 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'city_id' => 'required',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        $store = Store::findOrFail($id);
+        $store->update($request->only(['name']));
+
+        $user = $store->user;
+        $user->update($request->only(['city_id']));
+
+        if ($request->hasFile('logo')) {
+            $imagePath = $request->file('logo')->store('stores', 'public');
+            $store->logo = asset('storage/' . $imagePath);
+            $store->save();
+        }
+
+        if ($request->hasFile('banner')) {
+            $imagePath = $request->file('banner')->store('stores', 'public');
+            $store->banner = asset('storage/' . $imagePath);
+            $store->save();
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Store updated successfully',
             'data' => $store
         ], 200);
     }

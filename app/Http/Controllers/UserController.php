@@ -5,7 +5,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -32,14 +31,29 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::user();
-        $user->store;
         $user->role;
         $user->city->metropole;
+
+        $monthly_earnings = 0;
+        $require_verification = false;
+
+        if (in_array($user->role_id, [2, 3])) {
+            $user->store;
+            $monthly_earnings = 10.00; // TODO: calculate monthly earnings
+            if($monthly_earnings > 300){
+                $require_verification = true;
+            }else{
+                $require_verification = false;
+            }
+        }
+        
         return response()->json([
             'status' => true,
             'message' => 'User profile retrieved successfully',
             'data' => [
-                'user' => $user
+                'user' => $user,
+                'monthly_earnings' => $monthly_earnings,
+                'require_verification' => $require_verification
             ]
         ], 200);
     }
@@ -74,6 +88,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -84,7 +99,13 @@ class UserController extends Controller
             ], 422);
         }
         $user = User::findOrFail($id);
-        $user->update($request->all());
+        $user->update($request->only(['name', 'lastname', 'email']));
+
+        if ($request->hasFile('profile_picture')) {
+            $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->profile_picture = asset('storage/' . $imagePath);
+            $user->save();
+        }
 
         return response()->json([
             'status' => true,

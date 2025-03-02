@@ -40,13 +40,10 @@ class ReservationController extends Controller
         ], 200);
     }
 
-    /**
-     * Show reservation steps for a specific reservation
-     */
-    public function showSteps($id)
+    public function reservationDetails($id)
     {
         $reservation = Reservation::with('reservationSteps')->find($id);
-
+        $reservation->product;
         if (!$reservation) {
             return response()->json([
                 'status' => false,
@@ -57,7 +54,10 @@ class ReservationController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Reservation details retrieved successfully',
-            'data' => $reservation->reservationSteps
+            'data' => [
+                "reservation" => $reservation,
+                "steps" => $reservation->reservationSteps
+            ]
         ], 200);
     }
 

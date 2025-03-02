@@ -37,7 +37,9 @@ class RegisterController extends BaseController
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        Store::create(['user_id' => $user->id]);
+        if (in_array($user->role_id, [2, 3])) { // only create a store for sellers
+            Store::create(['user_id' => $user->id]);
+        }        
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;
    
