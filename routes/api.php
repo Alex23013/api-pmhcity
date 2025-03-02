@@ -54,7 +54,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('stores/{id}/products', [StoreController::class, 'listProductsByStore']);
     Route::post('stores/{id}/edit', [StoreController::class, 'update']);
     
-    Route::get('reservations/{id}/details', [ReservationController::class, 'showSteps']);
+    Route::get('reservations/{id}/details', [ReservationController::class, 'reservationDetails']);
     Route::get('reservations', [ReservationController::class, 'index']);
     Route::post('reservations', [ReservationController::class, 'store']);
     Route::post('reservations/update-status', [ReservationController::class, 'updateStatus']);

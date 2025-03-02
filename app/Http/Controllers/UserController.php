@@ -39,7 +39,7 @@ class UserController extends Controller
 
         if (in_array($user->role_id, [2, 3])) {
             $user->store;
-            $monthly_earnings = 10.00;
+            $monthly_earnings = 10.00; // TODO: calculate monthly earnings
             if($monthly_earnings > 300){
                 $require_verification = true;
             }else{
