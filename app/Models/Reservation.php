@@ -37,6 +37,6 @@ class Reservation extends Model
 
     public function reservationSteps()
     {
-        return $this->hasMany(ReservationStep::class)->select('id', 'created_at', 'reservation_status_id', 'reservation_id')->with('reservationStatus:id,name');
+        return $this->hasMany(ReservationStep::class)->select('id', 'created_at', 'reservation_status_id', 'reservation_id')->with('reservationStatus:id,name,display_name');
     }
 }

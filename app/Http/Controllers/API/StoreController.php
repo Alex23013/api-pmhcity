@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Store;
+use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 
 class StoreController extends BaseController
@@ -17,6 +18,19 @@ class StoreController extends BaseController
 
         $stores = [];
         foreach ($sellers as $seller) {
+            // Eager load related models
+            $products = $seller->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory'])->get();
+
+            // Get unique category IDs from the user's products
+            $categoryIds = $products->pluck('category_id')->unique()->toArray();
+
+            // Randomly select 3 category IDs
+            $randomCategoryIds = collect($categoryIds)->random(min(3, count($categoryIds)));
+
+            // Retrieve the category details for the selected category IDs
+            $category_names = Category::whereIn('id', $randomCategoryIds)->pluck('name')->toArray();
+            $category_names_string = implode(', ', $category_names);
+
             $store = $seller->store;
             if ($store) {
                 $stores[] = [
@@ -24,7 +38,7 @@ class StoreController extends BaseController
                         "id" => $store->id,
                         "name" => $store->name,
                         "logo" => $store->logo,
-                        "subtitle"=> "store description",
+                        "subtitle"=> $category_names_string,
                     ],
                 ];
             }
@@ -33,7 +47,9 @@ class StoreController extends BaseController
         return response()->json([
             'status' => true,
             'message' => 'Stores retrieved successfully.',
-            'data' => $stores
+            'data' => [
+                "stores" => $stores
+            ]
         ], 200);
     }
 
