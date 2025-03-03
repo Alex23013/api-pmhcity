@@ -14,13 +14,13 @@ use App\Http\Controllers\API\SubcategoryController;
 use App\Http\Controllers\API\MetropoleController;
 use App\Http\Controllers\API\ColorController;
 use App\Http\Controllers\API\BrandController;
+use App\Http\Controllers\API\ReservationStatusController;
 use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\StatusProductController;
 use App\Http\Controllers\API\MaterialController;
 
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\API\StoreController;
-use App\Models\StatusProduct;
 
 Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::resource('metropoles', MetropoleController::class);
     Route::resource('colors', ColorController::class);
     Route::resource('brands', BrandController::class);
+    Route::resource('reservation-statuses', ReservationStatusController::class);
     Route::resource('status-products', StatusProductController::class);
     Route::resource('sizes', SizeController::class);
     Route::resource('materials', MaterialController::class);
