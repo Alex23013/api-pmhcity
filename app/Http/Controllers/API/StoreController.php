@@ -65,8 +65,8 @@ class StoreController extends BaseController
 
         $user = $store->user;
 
-        $products = $user->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory'])->get();
-
+        $products = $user->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory', 'photoProducts'])->get();
+        
         return response()->json([
             'status' => true,
             'message' => 'Products retrieved successfully.',
