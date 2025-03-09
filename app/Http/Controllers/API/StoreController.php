@@ -87,8 +87,7 @@ class StoreController extends BaseController
     public function verifyStore(Request $request)
     {
         $request->validate([
-            'siret' => 'required|string',
-            'company_name' => 'required|string|max:255',
+            'siret' => 'required|string'
         ]);
 
         $user = Auth::user();
@@ -103,8 +102,7 @@ class StoreController extends BaseController
 
         // Update store details
         $store->update([
-            'siret' => $request->siret,
-            'name' => $request->company_name,
+            'siret' => $request->siret
         ]);
 
         $user = User::find($user->id); 
