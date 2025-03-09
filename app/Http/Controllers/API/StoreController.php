@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Store;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ProductResource;
 
 class StoreController extends BaseController
 {
@@ -71,7 +72,7 @@ class StoreController extends BaseController
             'status' => true,
             'message' => 'Products retrieved successfully.',
             'data' => [
-                'products' => $products,
+                'products' => ProductResource::collection($products),
                 'store' => [
                         "logo" => $user->profile_picture,
                         "name" => $store->name,
