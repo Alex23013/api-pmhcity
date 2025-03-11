@@ -21,8 +21,12 @@ class ProductController extends BaseController
     {
         
         $products = Product::with('photoProducts')->get();
-    
-        return $this->sendResponse(ProductResource::collection($products), 'Products retrieved successfully.');
+        $response = [
+            'success' => true,
+            'message' => 'Products retrieved successfully.',
+            'data' => ProductResource::collection($products)
+        ];
+        return response()->json($response, 200);
     }
 
     /**
@@ -108,8 +112,12 @@ class ProductController extends BaseController
         if (is_null($product)) {
             return $this->sendError('Product not found.');
         }
-   
-        return $this->sendResponse(new ProductResource($product), 'Product retrieved successfully.');
+        $response = [
+            'success' => true,
+            'message' => 'Product retrieved successfully.',
+            'data' => new ProductResource($product)
+        ];
+        return response()->json($response, 200);
     }
     
     /**
@@ -174,8 +182,13 @@ class ProductController extends BaseController
                 ]);
             }
         }
-   
-        return $this->sendResponse(new ProductResource($product), 'Product updated successfully.');
+
+        $response = [
+            'success' => true,
+            'message' => 'Product updated successfully.',
+            'data' => new ProductResource($product)
+        ];
+        return response()->json($response, 200);
     }
    
     /**
