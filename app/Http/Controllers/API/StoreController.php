@@ -74,12 +74,12 @@ class StoreController extends BaseController
             'data' => [
                 'products' => ProductResource::collection($products),
                 'store' => [
-                        "logo" => $user->profile_picture,
+                        "logo" => $store->logo,
                         "name" => $store->name,
                         "phone" => $user->phone,
                         "city" => $user->city->name,
                         "metropole" => $user->city->metropole->name,
-                        "banner" => $store->logo,
+                        "banner" => $store->banner,
                         ]
                 ]
         ], 200);
