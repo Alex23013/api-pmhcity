@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('verification_code')->nullable();
             $table->string('profile_status')->default('new');
             $table->string('profile_picture')->nullable();
-            $table->string('phone')->nullable();
+            $table->string('phone')->nullable(); // this is only filled when phone is verified
         
 
             // seller brand by default
