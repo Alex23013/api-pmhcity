@@ -9,7 +9,8 @@ use App\Models\PhotoProduct;
 use Validator;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\JsonResponse;
-   
+use Illuminate\Support\Facades\Auth;
+
 class ProductController extends BaseController
 {
     /**
@@ -19,10 +20,14 @@ class ProductController extends BaseController
      */
     public function index(): JsonResponse
     {
-        
-        $products = Product::with('photoProducts')->get();
-    
-        return $this->sendResponse(ProductResource::collection($products), 'Products retrieved successfully.');
+        $user = Auth::user();
+        $products = Product::with('photoProducts')->where('user_id', $user->id)->get();
+        $response = [
+            'success' => true,
+            'message' => 'Products retrieved successfully.',
+            'data' => ProductResource::collection($products)
+        ];
+        return response()->json($response, 200);
     }
 
     /**
