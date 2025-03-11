@@ -7,10 +7,10 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Validator;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
-   
+use App\Models\PhoneToken;
+use Illuminate\Support\Facades\Validator;
+
 class RegisterController extends BaseController
 {
     /**
@@ -26,12 +26,23 @@ class RegisterController extends BaseController
             'email' => 'required|string|email|unique:users|max:255',
             'password' => 'required',
             'c_password' => 'required|same:password',
-            'role_id' => 'required|exists:roles,id',
+            'phone' => 'required|string|max:12',
+            'role_id' => 'required|exists:roles,id'
         ]);
+
+
    
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
+        }
+
+        $phoneToken = PhoneToken::where('phone_number', $request->phone)
+            ->where('is_verified', true)
+            ->first();
+
+        if (!$phoneToken) {
+            return $this->sendError('Phone number is not verified.', ['phone' => 'The provided phone number has not been verified.']);
         }
    
         $input = $request->all();
