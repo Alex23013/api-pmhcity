@@ -18,6 +18,7 @@ use App\Http\Controllers\API\ReservationStatusController;
 use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\StatusProductController;
 use App\Http\Controllers\API\MaterialController;
+use App\Http\Controllers\API\PhoneTokenController;
 
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\API\StoreController;
@@ -61,6 +62,9 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('reservations/update-status', [ReservationController::class, 'updateStatus']);
 
 });
+
+Route::post('/phone-tokens/generate', [PhoneTokenController::class, 'generateToken']);
+Route::post('/phone-tokens/verify', [PhoneTokenController::class, 'verifyToken']);
 
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
