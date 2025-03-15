@@ -35,11 +35,8 @@ Route::middleware('auth:sanctum')->group( function () {
     
     Route::get('profile', [UserController::class, 'profile']);
     Route::get('categories/names', [CategoryController::class, 'listNames']);
-    Route::get('metropoles/names', [MetropoleController::class, 'listNames']);
-    Route::get('metropoles/{id}/cities', [CityController::class, 'getCitiesByMetropole']);
 
     Route::resource('categories', CategoryController::class);
-    Route::resource('metropoles', MetropoleController::class);
     Route::resource('colors', ColorController::class);
     Route::resource('brands', BrandController::class);
     Route::resource('reservation-statuses', ReservationStatusController::class);
@@ -65,6 +62,10 @@ Route::middleware('auth:sanctum')->group( function () {
 
 Route::post('/phone-tokens/generate', [PhoneTokenController::class, 'generateToken']);
 Route::post('/phone-tokens/verify', [PhoneTokenController::class, 'verifyToken']);
+
+Route::resource('metropoles', MetropoleController::class);
+Route::get('metropoles/names', [MetropoleController::class, 'listNames']);
+Route::get('metropoles/{id}/cities', [CityController::class, 'getCitiesByMetropole']);
 
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
