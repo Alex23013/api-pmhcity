@@ -44,6 +44,7 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::with('reservationSteps')->find($id);
         $reservation->product;
+        $reservation->amount = $reservation->quantity * $reservation->product->price;
         if (!$reservation) {
             return response()->json([
                 'status' => false,
