@@ -8,6 +8,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\PhoneToken;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Twilio\Rest\Client;
 
 class PhoneTokenController extends BaseController
 {
@@ -19,19 +20,31 @@ class PhoneTokenController extends BaseController
         ]);
 
         // Generate a 6-digit token
-        $token = Str::random(6);
+        $phone_token = mt_rand(100000, 999999);
         $expiresAt = Carbon::now()->addMinutes(15);
-
+        if(getenv("TWILIO_MODE") == "prod"){
+            $sid = getenv("TWILIO_ACCOUNT_SID");
+            $token = getenv("TWILIO_AUTH_TOKEN");
+            
+            $twilio = new Client($sid, $token);
+            $message = $twilio->messages
+            ->create("+51943415889",
+                array(
+                "from" => "+18566363963",
+                "body" => "Your PMHCity verification code is $phone_token"
+                )
+            );
+        }
+        
         // Store token
         PhoneToken::updateOrCreate(
             ['phone_number' => $request->phone_number],
-            ['token' => $token, 'expires_at' => $expiresAt, 'is_verified' => false]
+            ['token' => $phone_token, 'expires_at' => $expiresAt, 'is_verified' => false]
         );
 
         return response()->json([
             'status' => true,
-            'message' => 'Token generated successfully.',
-            'token' => $token, // In real scenarios, send via SMS instead
+            'message' => 'Token generated successfully.'
         ], 200);
     }
 
@@ -43,20 +56,26 @@ class PhoneTokenController extends BaseController
             'token' => 'required|string|max:6',
         ]);
 
-        $phoneToken = PhoneToken::where('phone_number', $request->phone_number)
+        if ((getenv("TWILIO_MODE") != "prod") && $request->token == '299613'){ //master dev token
+            return response()->json([
+                'status' => true,
+                'message' => 'Phone number verified successfully.',
+            ], 200);
+        }else{
+            $phone_token = PhoneToken::where('phone_number', $request->phone_number)
             ->where('token', $request->token)
             ->where('expires_at', '>', Carbon::now())
             ->first();
+        }
 
-        if (!$phoneToken) {
+        if (!$phone_token) {
             return response()->json([
                 'status' => false,
                 'message' => 'Invalid or expired token.',
             ], 400);
         }
-
         // Mark as verified
-        $phoneToken->update(['is_verified' => true]);
+        $phone_token->update(['is_verified' => true]);
 
         return response()->json([
             'status' => true,
