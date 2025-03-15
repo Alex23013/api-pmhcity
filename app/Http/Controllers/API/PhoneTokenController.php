@@ -22,7 +22,7 @@ class PhoneTokenController extends BaseController
         // Generate a 6-digit token
         $phone_token = mt_rand(100000, 999999);
         $expiresAt = Carbon::now()->addMinutes(15);
-        if((getenv("TWILIO_MODE")?? 'dev') == "prod"){
+        if(getenv("TWILIO_MODE") == "prod"){
             $sid = getenv("TWILIO_ACCOUNT_SID");
             $token = getenv("TWILIO_AUTH_TOKEN");
             
@@ -56,7 +56,7 @@ class PhoneTokenController extends BaseController
             'token' => 'required|string|max:6',
         ]);
 
-        if ((getenv("TWILIO_MODE")?? 'dev' == "dev") && $request->token == '299613'){ //master dev token
+        if ((getenv("TWILIO_MODE") != "prod") && $request->token == '299613'){ //master dev token
             return response()->json([
                 'status' => true,
                 'message' => 'Phone number verified successfully.',
