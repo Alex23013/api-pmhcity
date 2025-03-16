@@ -25,6 +25,12 @@ class SizeController extends BaseController
         return response()->json($sizes);
     }
 
+    public function listSizesBySubcategory($id)
+    {
+        $sizes = Size::select('id', 'name')->get();
+        return SizeResource::collection($sizes);
+    }
+
     /**
      * Store a newly created size.
      */

@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::resource('reservation-statuses', ReservationStatusController::class);
     Route::resource('status-products', StatusProductController::class);
     Route::resource('sizes', SizeController::class);
+    Route::get('sizes/{id}/subcategory', [SizeController::class, 'listSizesBySubcategory']);
     Route::resource('materials', MaterialController::class);
 
     Route::apiResource('subcategories', SubcategoryController::class);
