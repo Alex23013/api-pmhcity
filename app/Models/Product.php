@@ -80,14 +80,13 @@ class Product extends Model
         return $this->belongsTo(StatusProduct::class);
     }
 
-    public function size_ids($value)
+    public function sizes()
     {
-        if(!$value){
-            return [];
-        }
-        $sizeIds = explode(',', $value);
-        if (is_array($sizeIds) && count($sizeIds) > 0) {
-            return Size::whereIn('id', $sizeIds)->get(['id', 'name'])->toArray();
+        if($this->size_ids != null){
+            $sizeIds = explode(',', $this->size_ids);
+            if (is_array($sizeIds) && count($sizeIds) > 0) {
+                return Size::whereIn('id', $sizeIds)->get(['id', 'name'])->toArray();
+            }
         }
         return [];
     }

@@ -45,8 +45,11 @@ class ProductResource extends JsonResource
                 'id' => $this->status_product->id,
                 'name' => $this->status_product->name,
             ] : null,
-            'size_ids'=>$this->size_ids,
-            'color_id'=>$this->color_id,
+            'size_ids'=>$this->sizes($this->size_ids),
+            'color_id'=>$this->color_id? [
+                'id' => $this->color->id,
+                'name' => $this->color->name,
+            ] : null,
             'created_at' => $this->created_at->format('d/m/Y'),
             'updated_at' => $this->updated_at->format('d/m/Y'),
         ];
