@@ -72,7 +72,7 @@ class Product extends Model
 
     public function color()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsTo(Color::class);
     }
 
     public function status_product()
