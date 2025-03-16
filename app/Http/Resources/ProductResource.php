@@ -18,6 +18,8 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'pmh_reference_code' => $this->pmh_reference_code,
+            'article_code' => $this->article_code,
             'price'=>$this->price,
             'is_active'=>$this->is_active,
             'category' => $this->category ? [
@@ -44,7 +46,7 @@ class ProductResource extends JsonResource
                 'name' => $this->status_product->name,
             ] : null,
             'size_ids'=>$this->size_ids,
-            'color_ids'=>$this->color_ids,
+            'color_id'=>$this->color_id,
             'created_at' => $this->created_at->format('d/m/Y'),
             'updated_at' => $this->updated_at->format('d/m/Y'),
         ];

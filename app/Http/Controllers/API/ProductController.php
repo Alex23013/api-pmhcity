@@ -50,6 +50,9 @@ class ProductController extends BaseController
             'is_active' => 'required',
             'material_id' => 'nullable|exists:materials,id',
             'brand_id' => 'nullable|exists:brands,id',
+            'color_id' => 'nullable|exists:colors,id',
+            'size_ids' => 'nullable',
+            'article_code' => 'nullable',
             'status_product_id' => 'nullable|exists:status_products,id',
             'photo1' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'photo2' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -64,20 +67,25 @@ class ProductController extends BaseController
         }
    
         $productData = $request->only([
-            'name', 'description', 'user_id', 'price', 'category_id', 'subcategory_id', 'is_active', 'brand_id', 'status_product_id'
+            'name', 'description', 'user_id', 'price', 'category_id', 'subcategory_id', 'is_active', 'brand_id', 'status_product_id',
         ]);
     
         // Add material_id if it is present and not null
         if ($request->has('material_id') && !is_null($request->material_id)) {
             $productData['material_id'] = $request->material_id;
         }
-
+        // Add article_code if it is present and not null
+        if($request->has('article_code') && !is_null($request->article_code)) {
+            $productData['article_code'] = $request->article_code;
+        }
         //dd($request->input('size_ids'));
         
-        $productData['size_ids'] = json_encode($request->input('size_ids'));
-        $productData['color_ids'] = json_encode($request->input('color_ids'));    
+        $productData['size_ids'] = $request->input('size_ids');
+        $productData['color_id'] = $request->input('color_id');    
 
         $product = Product::create($productData);
+        $product->pmh_reference_code = 'PMH' . str_pad($product->id, 6, '0', STR_PAD_LEFT);
+        $product->save();
 
         // Handle photo uploads
         $photos = ['photo1', 'photo2', 'photo3', 'photo4', 'photo5', 'photo6'];
@@ -163,8 +171,8 @@ class ProductController extends BaseController
         $product->material_id = $input['material_id']?? null; # TODO: only optional
         $product->brand_id = $input['brand_id']?? null;
         $product->status_product_id = $input['status_product_id']?? null;
-        $product->size_ids = json_encode($input['size_ids'] ?? []);
-        $product->color_ids = json_encode($input['color_ids'] ?? []);
+        $product->size_ids = $input['size_ids']?? null;
+        $product->color_id = $input['color_id'] ?? null;
         $product->updated_at = now();
         $product->save();
 

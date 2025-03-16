@@ -33,12 +33,11 @@ class Product extends Model
         'is_active',
         'material_id',
         'brand_id',
-        'status_product_id'
-    ];
-
-    protected $casts = [
-        'size_ids' => 'array',
-        'color_ids' => 'array',
+        'status_product_id',
+        'color_id',
+        'size_ids',
+        'article_code',
+        'pmh_reference_code',
     ];
 
     public function user()
@@ -78,18 +77,9 @@ class Product extends Model
 
     public function getSizeIdsAttribute($value)
     {
-        $sizeIds = json_decode($value, true);
+        $sizeIds = explode(',', $value);
         if (is_array($sizeIds) && count($sizeIds) > 0) {
             return Size::whereIn('id', $sizeIds)->get(['id', 'name'])->toArray();
-        }
-        return [];
-    }
-
-    public function getColorIdsAttribute($value)
-    {
-        $colorIds = json_decode($value, true);
-        if (is_array($colorIds) && count($colorIds) > 0) {
-            return Color::whereIn('id', $colorIds)->get(['id', 'name', 'hex_code'])->toArray();
         }
         return [];
     }

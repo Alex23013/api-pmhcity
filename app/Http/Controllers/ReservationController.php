@@ -86,7 +86,6 @@ class ReservationController extends Controller
             'product_id' => $product->id,
             'quantity' => $request->quantity??1,
             'comment' => $request->comment??null,
-            // TODO: add color depending on how frontend will handle it
             'last_status' => 'created', // Default status
         ]);
 
