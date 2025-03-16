@@ -70,13 +70,21 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
+    public function color()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
     public function status_product()
     {
         return $this->belongsTo(StatusProduct::class);
     }
 
-    public function getSizeIdsAttribute($value)
+    public function size_ids($value)
     {
+        if(!$value){
+            return [];
+        }
         $sizeIds = explode(',', $value);
         if (is_array($sizeIds) && count($sizeIds) > 0) {
             return Size::whereIn('id', $sizeIds)->get(['id', 'name'])->toArray();
