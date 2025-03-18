@@ -9,13 +9,14 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Size;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\SizeResource;
+use App\Models\Subcategory;
 
 class SizeController extends BaseController
 {
 
     public function index()
     {
-        $sizes = Size::all();
+        $sizes = Size::orderBy('id')->limit(17)->get();
         return SizeResource::collection($sizes);
     }
 
@@ -27,7 +28,8 @@ class SizeController extends BaseController
 
     public function listSizesBySubcategory($id)
     {
-        $sizes = Size::select('id', 'name')->get();
+        $subcategory = Subcategory::find($id);
+        $sizes = $subcategory->sizeType->sizes;
         return SizeResource::collection($sizes);
     }
 
