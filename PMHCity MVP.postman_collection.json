@@ -1080,14 +1080,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/sizes/2/subcategory",
+							"raw": "{{base_url}}/api/sizes/4/subcategory",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"sizes",
-								"2",
+								"4",
 								"subcategory"
 							]
 						}
