@@ -2,35 +2,33 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SubcategoryResource\Pages;
-use App\Models\Subcategory;
+use App\Filament\Resources\SizeResource\Pages;
+use App\Models\Size;
 use Filament\Forms;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 
-class SubcategoryResource extends Resource
+class SizeResource extends Resource
 {
-    protected static ?string $model = Subcategory::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $model = Size::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-scale';
 
     public static function form(Forms\Form $form): Forms\Form
     {
         return $form
             ->schema([
-                Select::make('category_id')
-                    ->relationship('category', 'name')
-                    ->required(),
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+
                 Select::make('size_type_id')
-                    ->label('Size Type')
                     ->relationship('sizeType', 'name')
                     ->nullable()
-                    ->searchable(),
+                    ->label('Size Type'),
             ]);
     }
 
@@ -39,14 +37,11 @@ class SubcategoryResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('category.name')->label('Category')->sortable(),
                 TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('sizeType.name')->label('Size Type')->sortable()->searchable(),
-                TextColumn::make('created_at')->dateTime()->sortable(),
+                TextColumn::make('sizeType.name')->label('Size Type')->sortable(),
+                TextColumn::make('created_at')->dateTime('d/m/Y')->sortable(),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
@@ -55,18 +50,19 @@ class SubcategoryResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-
     public static function getRelations(): array
     {
-        return [];
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSubcategories::route('/'),
-            'create' => Pages\CreateSubcategory::route('/create'),
-            'edit' => Pages\EditSubcategory::route('/{record}/edit'),
+            'index' => Pages\ListSizes::route('/'),
+            'create' => Pages\CreateSize::route('/create'),
+            'edit' => Pages\EditSize::route('/{record}/edit'),
         ];
     }
 }
