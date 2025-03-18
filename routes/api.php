@@ -59,6 +59,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('reservations', [ReservationController::class, 'store']);
     Route::post('reservations/update-status', [ReservationController::class, 'updateStatus']);
 
+    Route::post('/phone/verify', [PhoneTokenController::class, 'verifyTokenInProfile']);
 });
 
 Route::post('/phone-tokens/generate', [PhoneTokenController::class, 'generateToken']);

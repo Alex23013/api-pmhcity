@@ -120,6 +120,50 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "verifyTokenProfile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token_seller_local}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone_number\":\"943415789\",\n    \"token\": \"29963\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/phone/verify",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"phone",
+								"verify"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

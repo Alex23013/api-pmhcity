@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\API\BaseController as BaseController;
 
 use App\Models\PhoneToken;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Twilio\Rest\Client;
 
@@ -76,6 +78,48 @@ class PhoneTokenController extends BaseController
         }
         // Mark as verified
         $phone_token->update(['is_verified' => true]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Phone number verified successfully.',
+        ], 200);
+    }
+
+    public function verifyTokenInProfile(Request $request){
+        $user = Auth::user();
+        $request = request();
+        $request->validate([
+            'token' => 'required|string|max:6',
+        ]);
+
+        if ((getenv("TWILIO_MODE") != "prod") && $request->token == '299613'){ //master dev token
+            $user = User::find($user->id); 
+            $user->update([
+                'phone' => $request->phone_number
+            ]);
+            return response()->json([
+                'status' => true,
+                'message' => 'Phone number updated successfully.',
+            ], 200);
+        }else{
+            $phone_token = PhoneToken::where('phone_number', $request->phone_number)
+            ->where('token', $request->token)
+            ->where('expires_at', '>', Carbon::now())
+            ->first();
+        }
+
+        if (!$phone_token) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid or expired token.',
+            ], 400);
+        }
+        // Mark as verified
+        $phone_token->update(['is_verified' => true]);
+        $user = User::find($user->id); 
+        $user->update([
+            'phone' => $request->phone_number
+        ]);
 
         return response()->json([
             'status' => true,
