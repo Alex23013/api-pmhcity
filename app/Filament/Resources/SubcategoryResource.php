@@ -29,8 +29,7 @@ class SubcategoryResource extends Resource
                 Select::make('size_type_id')
                     ->label('Size Type')
                     ->relationship('sizeType', 'name')
-                    ->nullable()
-                    ->searchable(),
+                    ->nullable(),
             ]);
     }
 
