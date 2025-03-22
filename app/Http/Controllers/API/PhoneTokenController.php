@@ -30,24 +30,29 @@ class PhoneTokenController extends BaseController
             
             $twilio = new Client($sid, $token);
             $message = $twilio->messages
-            ->create("+51943415889",
+            ->create("+51".$request->phone_number, // to
                 array(
-                "from" => "+18566363963",
+                "from" => "+15309995988",
                 "body" => "Your PMHCity verification code is $phone_token"
                 )
             );
         }
-        
-        // Store token
-        PhoneToken::updateOrCreate(
-            ['phone_number' => $request->phone_number],
-            ['token' => $phone_token, 'expires_at' => $expiresAt, 'is_verified' => false]
-        );
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Token generated successfully.'
-        ], 200);
+        if($message->sid){
+            // Store token
+            PhoneToken::updateOrCreate(
+                ['phone_number' => $request->phone_number],
+                ['token' => $phone_token, 'expires_at' => $expiresAt, 'is_verified' => false]
+            );
+            return response()->json([
+                'status' => true,
+                'message' => 'Token generated successfully.'
+            ], 200);
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'Error sending SMS.'
+            ], 400);
+        }              
     }
 
 
