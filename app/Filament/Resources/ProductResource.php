@@ -69,6 +69,7 @@ class ProductResource extends Resource
                 TextColumn::make('id')->sortable(),
                 TextColumn::make('pmh_reference_code')->sortable(),
                 TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('description')->label('Description')->limit(50)->searchable(),
                 TextColumn::make('user.name')->label('Seller')->sortable(),
                 TextColumn::make('category.name')->label('Category')->sortable(),
                 TextColumn::make('subcategory.name')->label('Subcategory')->sortable(),
