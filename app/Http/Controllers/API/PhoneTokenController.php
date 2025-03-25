@@ -24,6 +24,7 @@ class PhoneTokenController extends BaseController
         // Generate a 6-digit token
         $phone_token = mt_rand(100000, 999999);
         $expiresAt = Carbon::now()->addMinutes(15);
+        $message = null;
         if(getenv("TWILIO_MODE") == "prod"){
             $sid = getenv("TWILIO_ACCOUNT_SID");
             $token = getenv("TWILIO_AUTH_TOKEN");
