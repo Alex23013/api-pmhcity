@@ -37,7 +37,8 @@ class PhoneTokenController extends BaseController
                 )
             );
         }
-        if($message->sid){
+        
+        if($message && $message->status == 'queued'){
             // Store token
             PhoneToken::updateOrCreate(
                 ['phone_number' => $request->phone_number],
@@ -52,7 +53,7 @@ class PhoneTokenController extends BaseController
                 'status' => false,
                 'message' => 'Error sending SMS.'
             ], 400);
-        }              
+        }       
     }
 
 
