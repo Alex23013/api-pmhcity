@@ -18,6 +18,7 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'composition' => $this->composition,
             'pmh_reference_code' => $this->pmh_reference_code,
             'article_code' => $this->article_code,
             'price'=>$this->price,
@@ -31,7 +32,7 @@ class ProductResource extends JsonResource
                 'name' => $this->subcategory->name,
             ] : null,
             'photos' => $this->photoProducts ? $this->photoProducts->map(function ($photo) {
-                return asset('storage/' . $photo->url);
+                return str_contains($photo->url, 'https') ? $photo->url : asset('storage/' . $photo->url);
             }) : [],
             'brand_id'=>$this->brand_id? [
                 'id' => $this->brand->id,

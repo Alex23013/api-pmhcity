@@ -15,7 +15,9 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $categories = Category::with('subcategories')->get();
+        $categories = Category::with(['subcategories' => function ($query) {
+            $query->orderBy('id');
+        }])->orderBy('id')->get();
         return CategoryResource::collection($categories);
     }
 
@@ -32,6 +34,7 @@ class CategoryController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:categories,name|max:255',
+            'cover_image' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -41,8 +44,18 @@ class CategoryController extends BaseController
                 'errors' => $validator->errors(),
             ], 422);
         }
+        $categoryData = $request->only(['name']);
 
-        $category = Category::create($request->only(['name']));
+        if ($request->hasFile('cover_image')) {
+            // Store the file and get the path
+            $imagePath = $request->file('cover_image')->store('cover_photos', 'public');
+            $categoryData['cover_image'] = $imagePath;
+        } elseif ($request->filled('cover_image')) {
+            // Use the provided value (e.g., a URL)
+            $categoryData['cover_image'] = $request->input('cover_image');
+        }
+
+        $category = Category::create($categoryData);
 
         return response()->json([
             'success' => true,
