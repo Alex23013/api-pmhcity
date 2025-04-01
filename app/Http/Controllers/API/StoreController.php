@@ -33,7 +33,7 @@ class StoreController extends BaseController
             $category_names_string = implode(', ', $category_names);
 
             $store = $seller->store;
-            if ($store) {
+            if ($store && $store->name && $store->name !== '') {
                 $stores[] = [
                     "store" =>[
                         "id" => $store->id,
