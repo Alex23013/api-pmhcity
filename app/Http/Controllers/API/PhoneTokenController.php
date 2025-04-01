@@ -31,7 +31,7 @@ class PhoneTokenController extends BaseController
             
             $twilio = new Client($sid, $token);
             $message = $twilio->messages
-            ->create("+33".$request->phone_number, // to
+            ->create($request->phone_number, // to
                 array(
                 "from" => "+15309995988",
                 "body" => "Votre code de vérification PMHCity est $phone_token"
