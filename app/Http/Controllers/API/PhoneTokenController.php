@@ -34,7 +34,7 @@ class PhoneTokenController extends BaseController
             ->create("+33".$request->phone_number, // to
                 array(
                 "from" => "+15309995988",
-                "body" => "Your PMHCity verification code is $phone_token"
+                "body" => "Votre code de vérification PMHCity est $phone_token"
                 )
             );
         }

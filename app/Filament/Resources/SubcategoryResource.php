@@ -26,6 +26,10 @@ class SubcategoryResource extends Resource
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                TextInput::make('cover_image')
+                    ->label('Cover Image URL')
+                    ->required()
+                    ->maxLength(255),
                 Select::make('size_type_id')
                     ->label('Size Type')
                     ->relationship('sizeType', 'name')
@@ -41,6 +45,7 @@ class SubcategoryResource extends Resource
                 TextColumn::make('category.name')->label('Category')->sortable(),
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('sizeType.name')->label('Size Type')->sortable()->searchable(),
+                TextColumn::make('cover_image')->label('Cover Image URL')->sortable(),
                 TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->filters([

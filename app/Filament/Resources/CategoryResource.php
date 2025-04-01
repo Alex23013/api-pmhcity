@@ -24,6 +24,10 @@ class CategoryResource extends Resource
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                TextInput::make('cover_image')
+                    ->label('Cover Image URL')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -33,6 +37,7 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('id')->sortable(),
                 TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('cover_image')->label('Cover Image URL')->sortable(),
                 TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->filters([

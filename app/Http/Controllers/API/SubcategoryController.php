@@ -30,13 +30,20 @@ class SubcategoryController extends BaseController
         $request->validate([
             'name' => 'required|string|max:255|unique:subcategories,name',
             'category_id' => 'required|exists:categories,id',
+            'cover_image' => 'nullable',
         ]);
+        $subcategoryData = $request->only(['name', 'category_id']);
 
-        // Create the subcategory
-        $subcategory = Subcategory::create([
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-        ]);
+        if ($request->hasFile('cover_image')) {
+            // Store the file and get the path
+            $imagePath = $request->file('cover_image')->store('cover_photos', 'public');
+            $subcategoryData['cover_image'] = $imagePath;
+        } elseif ($request->filled('cover_image')) {
+            // Use the provided value (e.g., a URL)
+            $subcategoryData['cover_image'] = $request->input('cover_image');
+        }
+
+        $subcategory = Subcategory::create($subcategoryData);
 
         // Return success response
         return response()->json([
@@ -50,7 +57,7 @@ class SubcategoryController extends BaseController
      */
     public function show($id): JsonResponse
     {
-        $subcategory = Subcategory::with('category:id,name')->find($id);
+        $subcategory = Subcategory::with('category:id,name, cover_image')->find($id);
 
         if (!$subcategory) {
             return response()->json(['message' => 'Subcategory not found'], 404);

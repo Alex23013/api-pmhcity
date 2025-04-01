@@ -38,6 +38,7 @@ class StoreController extends BaseController
                     "store" =>[
                         "id" => $store->id,
                         "name" => $store->name,
+                        "description" => $store->description,
                         "logo" => $store->logo,
                         "subtitle"=> $category_names_string,
                     ],

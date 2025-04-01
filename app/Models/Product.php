@@ -38,6 +38,7 @@ class Product extends Model
         'size_ids',
         'article_code',
         'pmh_reference_code',
+        'composition',
     ];
 
     public function user()

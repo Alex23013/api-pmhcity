@@ -30,6 +30,8 @@ class ProductResource extends Resource
                     ->maxLength(255),
                 TextInput::make('description')
                     ->maxLength(500),
+                TextInput::make('composition')
+                    ->maxLength(500),
                 TextInput::make('price')
                     ->numeric()
                     ->required(),
@@ -70,6 +72,7 @@ class ProductResource extends Resource
                 TextColumn::make('pmh_reference_code')->sortable(),
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('description')->label('Description')->limit(50)->searchable(),
+                TextColumn::make('composition')->label('Composition')->limit(50),
                 TextColumn::make('user.name')->label('Seller')->sortable(),
                 TextColumn::make('category.name')->label('Category')->sortable(),
                 TextColumn::make('subcategory.name')->label('Subcategory')->sortable(),
