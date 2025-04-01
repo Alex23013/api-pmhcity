@@ -16,7 +16,8 @@ class Store extends Model
         'siret',
         'is_verified',
         'logo',
-        'banner'
+        'banner',
+        'description',
     ];
 
     public function user()

@@ -33,6 +33,9 @@ class StoreResource extends Resource
                     ->label('Store Name')
                     ->required()
                     ->maxLength(255),
+                TextInput::make('description')
+                    ->label('Description')
+                    ->maxLength(255),
                 TextInput::make('logo')
                     ->label('Logo URL')
                     ->maxLength(255),
@@ -55,6 +58,9 @@ class StoreResource extends Resource
                 ->label('Store Name')
                 ->sortable()
                 ->searchable(),
+            TextColumn::make('description')
+                ->label('Description')
+                ->sortable(),
             TextColumn::make('siret')
                 ->label('SIRET'),
             BooleanColumn::make('is_verified')
