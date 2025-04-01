@@ -50,8 +50,6 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::put('stores/{id}/verified', [StoreController::class, 'markAsVerifiedStore']);
     Route::post('stores/verification', [StoreController::class, 'verifyStore']);
-    Route::get('stores', [StoreController::class, 'listStores']);
-    Route::get('stores/{id}/products', [StoreController::class, 'listProductsByStore']);
     Route::post('stores/{id}/edit', [StoreController::class, 'update']);
     
     Route::get('reservations/{id}/details', [ReservationController::class, 'reservationDetails']);
@@ -60,6 +58,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('reservations/update-status', [ReservationController::class, 'updateStatus']);
 
     Route::post('/phone/verify', [PhoneTokenController::class, 'verifyTokenInProfile']);
+    Route::post('/api/upload-products', [ProductController::class, 'uploadProductsCSV']);
 });
 
 Route::post('/phone-tokens/generate', [PhoneTokenController::class, 'generateToken']);
@@ -74,5 +73,11 @@ Route::get('/users/{id}', [UserController::class, 'show']);
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/users/{id}/edit', [UserController::class, 'update']);
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
+
+# Marketplace
+Route::get('stores', [StoreController::class, 'listStores']);
+Route::get('stores/{id}/products', [StoreController::class, 'listProductsByStore']);
+Route::get('/v2/products/{id}', [ProductController::class, 'show']);
+Route::get('/v2/categories', [CategoryController::class, 'index']);
 
 
