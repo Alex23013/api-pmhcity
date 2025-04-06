@@ -63,7 +63,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"phone_number\":\"943415788\"\n}\n\n",
+							"raw": "{\n    \"phone_number\":\"943415889\"\n}\n\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1044,7 +1044,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{bearer_token_local}}",
+									"value": "{{bearer_token_seller_server}}",
 									"type": "string"
 								}
 							]
@@ -1052,9 +1052,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/sizes",
+							"raw": "{{server_base_url}}/api/sizes",
 							"host": [
-								"{{base_url}}"
+								"{{server_base_url}}"
 							],
 							"path": [
 								"api",
@@ -1072,7 +1072,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{bearer_token_local}}",
+									"value": "{{bearer_token_seller_server}}",
 									"type": "string"
 								}
 							]
@@ -1080,14 +1080,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/sizes/4/subcategory",
+							"raw": "{{server_base_url}}/api/sizes/22/subcategory",
 							"host": [
-								"{{base_url}}"
+								"{{server_base_url}}"
 							],
 							"path": [
 								"api",
 								"sizes",
-								"4",
+								"22",
 								"subcategory"
 							]
 						}
@@ -1364,25 +1364,76 @@
 					"name": "listStores",
 					"request": {
 						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_base_url}}/api/stores",
+							"host": [
+								"{{local_base_url}}"
+							],
+							"path": [
+								"api",
+								"stores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get categories v2 Markeplace",
+					"request": {
+						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{bearer_token_local}}",
+									"value": "{{bearer_token}}",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server_base_url}}/api/categories/names",
+							"host": [
+								"{{server_base_url}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"names"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listProductsByStore",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/stores",
+							"raw": "{{base_url}}/api/stores/2/products",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"stores"
+								"stores",
+								"2",
+								"products"
 							]
 						}
 					},
@@ -1429,32 +1480,49 @@
 					"response": []
 				},
 				{
-					"name": "listProductsByStore",
+					"name": "showProductV2",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{bearer_token_local}}",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base_url}}/api/stores/2/products",
+							"raw": "{{base_url}}/api/v2/products/16",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"stores",
-								"2",
-								"products"
+								"v2",
+								"products",
+								"16"
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Batch upload",
+			"item": [
+				{
+					"name": "uploadProducts",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
