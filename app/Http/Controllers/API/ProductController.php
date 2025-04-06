@@ -5,9 +5,12 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Product;
+use App\Models\Store;
 use App\Models\PhotoProduct;
 use Validator;
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
+use App\Models\Subcategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,6 +46,7 @@ class ProductController extends BaseController
         $validator = Validator::make($input, [
             'name' => 'required',
             'description' => 'required',
+            'composition' => 'nullable',
             'user_id' => 'required|exists:users,id',
             'price' => 'required',
             'category_id' => 'required|exists:categories,id',
@@ -54,12 +58,12 @@ class ProductController extends BaseController
             'size_ids' => 'nullable',
             'article_code' => 'nullable',
             'status_product_id' => 'nullable|exists:status_products,id',
-            'photo1' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'photo2' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'photo3' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'photo4' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'photo5' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'photo6' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo1' => 'nullable',
+            'photo2' => 'nullable',
+            'photo3' => 'nullable',
+            'photo4' => 'nullable',
+            'photo5' => 'nullable',
+            'photo6' => 'nullable',
         ]);
    
         if($validator->fails()){
@@ -77,6 +81,10 @@ class ProductController extends BaseController
         // Add article_code if it is present and not null
         if($request->has('article_code') && !is_null($request->article_code)) {
             $productData['article_code'] = $request->article_code;
+        }
+
+        if($request->has('composition') && !is_null($request->composition)) {
+            $productData['composition'] = $request->composition;
         }
         //dd($request->input('size_ids'));
         
@@ -212,4 +220,109 @@ class ProductController extends BaseController
    
         return $this->sendResponse([], 'Product deleted successfully.');
     }
+
+    public function uploadProductsCSV(Request $request)
+    {
+        // Validate file input
+        $validator = Validator::make($request->all(), [
+            'store_id' => 'required|exists:stores,id',
+            'file' => 'required|file|mimes:csv,txt|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+        $store = Store::find($request->store_id);
+        if (is_null($store)) {
+            return response()->json(['error' => 'Store not found'], 404);
+        }
+        $user = $store->user;
+        $file = $request->file('file');
+        $handle = fopen($file->getPathname(), 'r');
+
+        if (!$handle) {
+            return response()->json(['error' => 'Could not open file'], 500);
+        }
+        $productsUploaded = 0;
+        // Skip the header row if present
+        $firstRowSkipped = false;
+
+        while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+            // Skip the header row
+            if (!$firstRowSkipped) {
+                $firstRowSkipped = true;
+                continue;
+            }
+
+            // Ensure the row has the correct number of columns
+            if (count($data) > 18) {
+                return response()->json(['error' => 'Invalid row: '.count($data)], 400);
+            }
+
+            // Extract fields
+            [
+                $name,
+                $description,
+                $composition,
+                $price,
+                $subcategory_id,
+                $is_active,
+                $status_product_id,
+                $material_id,              
+                $brand_id,
+                $size_ids,
+                $color_id,
+                $article_code,
+                $photo1,
+                $photo2,
+                $photo3,
+                $photo4,
+                $photo5,
+                $photo6,
+            ] = $data;
+
+            $size_ids = explode(',', $size_ids); // Convert to array
+            $category_id = Subcategory::find($subcategory_id)->category_id;
+            // Store the product
+            $product = Product::create([
+                'name' => $name,
+                'user_id' => $user->id,
+                'description' => $description,
+                'composition'=> $composition,
+                'material_id' => $material_id,
+                'price' => floatval($price),
+                'category_id' => intval($category_id),
+                'subcategory_id' => intval($subcategory_id),
+                'is_active' => $is_active,
+                'brand_id' => intval($brand_id),
+                'status_product_id' => intval($status_product_id),
+                'size_ids' => implode(',', $size_ids), // Store as a string
+                'color_id' => intval($color_id),
+                'article_code' => $article_code,
+            ]);
+            $product->pmh_reference_code = 'PMH' . str_pad($product->id, 6, '0', STR_PAD_LEFT);
+            $product->save();
+            $photos = ['photo1', 'photo2', 'photo3', 'photo4', 'photo5', 'photo6'];
+            foreach ($photos as $photo) {
+                $photo = ${$photo}; // Use variable variables to access the photo variables
+                if (!empty($photo)) {
+    
+                    if (str_contains($photo, 'https')) { // Check if the value contains "https"
+                        // Create PhotoProduct record with the URL
+                        PhotoProduct::create([
+                            'url' => $photo,
+                            'product_id' => $product->id
+                        ]);
+                    } 
+                    // upload bacth don't support files
+                }
+            }
+            $productsUploaded++;
+        }
+
+        fclose($handle);
+
+        return response()->json(['message' => $productsUploaded.' Products uploaded successfully'], 200);
+    }
+
 }
