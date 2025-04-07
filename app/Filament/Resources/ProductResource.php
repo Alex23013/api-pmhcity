@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\CategoryResource\RelationManagers\PhotoProductsRelationManager;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use Dom\Text;
@@ -100,7 +101,9 @@ class ProductResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            PhotoProductsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
