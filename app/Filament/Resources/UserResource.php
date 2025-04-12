@@ -43,10 +43,8 @@ class UserResource extends Resource
                 ->nullable(),
 
             Checkbox::make('is_admin')->label('Admin'),
-            TextInput::make('verification_code')->nullable(),
             TextInput::make('profile_status')->nullable(),
             FileUpload::make('profile_picture')->image()->nullable(),
-            DateTimePicker::make('email_verified_at')->nullable(),
         ]);
     }
 
