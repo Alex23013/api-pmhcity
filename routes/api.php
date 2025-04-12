@@ -73,6 +73,7 @@ Route::get('/users/{id}', [UserController::class, 'show']);
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/users/{id}/edit', [UserController::class, 'update']);
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
+Route::post('/forgot-password', [UserController::class, 'sendResetToken']);
 
 # Marketplace
 Route::get('stores', [StoreController::class, 'listStores']);

@@ -34,6 +34,8 @@ class User extends Authenticatable
         'city_id',
         'profile_picture',
         'phone',
+        'forget_password_token',
+        'fpt_expires_at',
     ];
             
     /**
