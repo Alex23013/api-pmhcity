@@ -5,6 +5,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+use App\Mail\ForgotPasswordTokenMail;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -124,4 +128,44 @@ class UserController extends Controller
             'message' => 'User deleted successfully'
         ], 204);
     }
+
+    public function sendResetToken(Request $request)
+    {
+        // Validate email
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid email',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        // Generate token and expiration
+        $token = Str::random(64);
+        $expiresAt = Carbon::now()->addMinutes(10);
+
+        // Update user
+        $user->update([
+            'forget_password_token' => $token,
+            'fpt_expires_at' => $expiresAt,
+        ]);
+
+        Mail::to($user->email)->send(new ForgotPasswordTokenMail($user, $token));
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Reset token generated.',
+            'data' => [
+                'token' => $token,
+                'expires_at' => $expiresAt,
+            ],
+        ]);
+    }
+
 }
