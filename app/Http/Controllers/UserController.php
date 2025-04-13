@@ -160,12 +160,42 @@ class UserController extends Controller
         
         return response()->json([
             'success' => true,
-            'message' => 'Reset token generated.',
-            'data' => [
-                'token' => $token,
-                'expires_at' => $expiresAt,
-            ],
+            'message' => 'Reset token generated.'
         ]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        // Validate token and password
+        $validator = Validator::make($request->all(), [
+            'token' => 'required|string',
+            'password' => 'required',
+            'c_password' => 'required|same:password',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $user = User::where('forget_password_token', $request->token)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Invalid token.'], 404);
+        }
+        
+        if (!$user->fpt_expires_at || Carbon::now('UTC')->greaterThan(Carbon::parse($user->fpt_expires_at))) {
+            return response()->json(['message' => 'Token has expired.'], 403);
+        }
+        $user->password = bcrypt($request->new_password);
+        $user->forget_password_token = null;
+        $user->fpt_expires_at = null;
+        $user->save();
+
+        return response()->json(['message' => 'Password updated successfully.']);
     }
 
 }

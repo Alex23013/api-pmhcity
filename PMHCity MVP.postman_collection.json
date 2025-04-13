@@ -164,6 +164,60 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "forget-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"alecornejolupa2013@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local_base_url}}/api/forgot-password",
+							"host": [
+								"{{local_base_url}}"
+							],
+							"path": [
+								"api",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"xbHmJHAK22d0FEmGQUZj6B0ln4ItMCdLFnBW7cGuL7CzTET7PyoXZ1RTjmBaBY7s\",\n    \"password\": \"123456\",\n    \"c_password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local_base_url}}/api/reset-password",
+							"host": [
+								"{{local_base_url}}"
+							],
+							"path": [
+								"api",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -575,7 +629,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{bearer_token_seller_server}}",
+									"value": "{{bearer_token_local}}",
 									"type": "string"
 								}
 							]
@@ -589,14 +643,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{server_base_url}}/api/products/17",
+							"raw": "{{base_url}}/api/products/35",
 							"host": [
-								"{{server_base_url}}"
+								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"products",
-								"17"
+								"35"
 							]
 						}
 					},
@@ -834,7 +888,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{bearer_token}}",
+									"value": "{{bearer_token_local}}",
 									"type": "string"
 								}
 							]
@@ -848,14 +902,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{server_base_url}}/api/categories/names",
+							"raw": "{{base_url}}/api/categories",
 							"host": [
-								"{{server_base_url}}"
+								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"categories",
-								"names"
+								"categories"
 							]
 						}
 					},
@@ -1234,6 +1287,70 @@
 					"response": []
 				},
 				{
+					"name": "deleteUser",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "seller de prueba original",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "lastname",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "seller@yopmail.com",
+									"type": "text"
+								},
+								{
+									"key": "profile_picture",
+									"type": "file",
+									"src": "/home/maria/Pictures/Screenshots/Screenshot from 2025-03-01 14-34-59.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server_base_url}}/api/users/13",
+							"host": [
+								"{{server_base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "listUsers",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -1369,9 +1486,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local_base_url}}/api/stores",
+							"raw": "{{server_base_url}}/api/stores",
 							"host": [
-								"{{local_base_url}}"
+								"{{server_base_url}}"
 							],
 							"path": [
 								"api",
@@ -1385,14 +1502,7 @@
 					"name": "Get categories v2 Markeplace",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{bearer_token}}",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [
@@ -1403,14 +1513,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{server_base_url}}/api/categories/names",
+							"raw": "{{base_url}}/api/v2/categories",
 							"host": [
-								"{{server_base_url}}"
+								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"categories",
-								"names"
+								"v2",
+								"categories"
 							]
 						}
 					},
@@ -1466,14 +1576,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/products/16",
+							"raw": "{{base_url}}/api/products/36",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"products",
-								"16"
+								"36"
 							]
 						}
 					},
@@ -1499,15 +1609,15 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/v2/products/16",
+							"raw": "{{server_base_url}}/api/v2/products/28",
 							"host": [
-								"{{base_url}}"
+								"{{server_base_url}}"
 							],
 							"path": [
 								"api",
 								"v2",
 								"products",
-								"16"
+								"28"
 							]
 						}
 					},
@@ -1521,8 +1631,49 @@
 				{
 					"name": "uploadProducts",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token_seller_server}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "store_id",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/maria/Downloads/PMHCity - Products  - Oxi.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server_base_url}}/api/upload-products",
+							"host": [
+								"{{server_base_url}}"
+							],
+							"path": [
+								"api",
+								"upload-products"
+							]
+						}
 					},
 					"response": []
 				}
