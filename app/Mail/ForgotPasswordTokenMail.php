@@ -27,11 +27,11 @@ class ForgotPasswordTokenMail extends Mailable
     {
         $url = 'https://pmhcity-preview.angeljsd.dev/new-password/' . $this->token;
 
-        return $this->subject('Reset Your Password')
-            ->view('emails.forgot-password')
-            ->with([
-                'url' => $url,
-                'name' => $this->user->name ?? $this->user->email,
-            ]);
+        return $this->markdown('emails.forgot-password')
+        ->subject('Reset Your Password')
+        ->with([
+            'url' => $url,
+            'name' => $this->user->name,
+        ]);
     }
 }
