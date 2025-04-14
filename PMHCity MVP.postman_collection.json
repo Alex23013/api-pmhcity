@@ -54,7 +54,7 @@
 					"response": []
 				},
 				{
-					"name": "generateToken",
+					"name": "generatePhoneToken",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -63,7 +63,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"phone_number\":\"943415889\"\n}\n\n",
+							"raw": "{\n    \"phone_number\":\"+51943415889\"\n}\n\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -71,9 +71,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{server_base_url}}/api/phone-tokens/generate",
+							"raw": "{{local_base_url}}/api/phone-tokens/generate",
 							"host": [
-								"{{server_base_url}}"
+								"{{local_base_url}}"
 							],
 							"path": [
 								"api",
@@ -85,7 +85,7 @@
 					"response": []
 				},
 				{
-					"name": "verifyToken",
+					"name": "verifyPhoneToken",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -100,7 +100,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"phone_number\":\"943415789\",\n    \"token\": \"299613\"\n}",
+							"raw": "{\n    \"phone_number\":\"943415889\",\n    \"token\": \"299613\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -108,9 +108,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{server_base_url}}/api/phone-tokens/verify",
+							"raw": "{{local_base_url}}/api/phone-tokens/verify",
 							"host": [
-								"{{server_base_url}}"
+								"{{local_base_url}}"
 							],
 							"path": [
 								"api",
@@ -214,6 +214,71 @@
 							"path": [
 								"api",
 								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "generateEmailToken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"maria.cornejo.lupa@ucsp.edu.pe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_base_url}}/api/email-tokens/generate",
+							"host": [
+								"{{server_base_url}}"
+							],
+							"path": [
+								"api",
+								"email-tokens",
+								"generate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verifyEmailToken",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"maria.cornejo.lupa@ucsp.edu.pe\",\n    \"token\": \"143943\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_base_url}}/api/email-tokens/verify",
+							"host": [
+								"{{server_base_url}}"
+							],
+							"path": [
+								"api",
+								"email-tokens",
+								"verify"
 							]
 						}
 					},
