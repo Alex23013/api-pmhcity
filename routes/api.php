@@ -19,6 +19,7 @@ use App\Http\Controllers\API\SizeController;
 use App\Http\Controllers\API\StatusProductController;
 use App\Http\Controllers\API\MaterialController;
 use App\Http\Controllers\API\PhoneTokenController;
+use App\Http\Controllers\API\EmailTokenController;
 
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\API\StoreController;
@@ -63,6 +64,9 @@ Route::middleware('auth:sanctum')->group( function () {
 
 Route::post('/phone-tokens/generate', [PhoneTokenController::class, 'generateToken']);
 Route::post('/phone-tokens/verify', [PhoneTokenController::class, 'verifyToken']);
+
+Route::post('/email-tokens/generate', [EmailTokenController::class, 'generateToken']);
+Route::post('/email-tokens/verify', [EmailTokenController::class, 'verifyToken']);
 
 Route::resource('metropoles', MetropoleController::class);
 Route::get('metropoles/names', [MetropoleController::class, 'listNames']);
