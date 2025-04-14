@@ -25,18 +25,41 @@ class PhoneTokenController extends BaseController
         $phone_token = mt_rand(100000, 999999);
         $expiresAt = Carbon::now()->addMinutes(15);
         $message = null;
+
+        // Ensure the phone number starts with +33 unless it starts with +51
+        $phone_number = $request->phone_number;
+        if (!str_starts_with($phone_number, '+51') && (strlen($phone_number) === 9 )) {
+            $phone_number = '+33' . $phone_number;
+        }
+
         if(getenv("TWILIO_MODE") == "prod"){
-            $sid = getenv("TWILIO_ACCOUNT_SID");
-            $token = getenv("TWILIO_AUTH_TOKEN");
-            
-            $twilio = new Client($sid, $token);
-            $message = $twilio->messages
-            ->create($request->phone_number, // to
-                array(
-                "from" => "+15309995988",
-                "body" => "Votre code de vérification PMHCity est $phone_token"
-                )
-            );
+            try {
+                $sid = getenv("TWILIO_ACCOUNT_SID");
+                $token = getenv("TWILIO_AUTH_TOKEN");
+
+                $twilio = new Client($sid, $token);
+
+                $message = $twilio->messages
+                    ->create($phone_number, // to
+                        [
+                            "from" => "+15309995988",
+                            "body" => "Votre code de vérification PMHCity est $phone_token"
+                        ]
+                    );
+
+            } catch (\Twilio\Exceptions\RestException $e) {
+                // Handle Twilio-specific errors
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Error sending SMS: ' . $e->getMessage(),
+                ], 400);
+            } catch (\Exception $e) {
+                // Handle general errors
+                return response()->json([
+                    'status' => false,
+                    'message' => 'An unexpected error occurred: ' . $e->getMessage(),
+                ], 500);
+            }
         }
         
         if($message && $message->status == 'queued'){
