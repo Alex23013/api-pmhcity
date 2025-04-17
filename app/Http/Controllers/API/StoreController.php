@@ -183,4 +183,49 @@ class StoreController extends BaseController
             'data' => $store
         ], 200);
     }
+
+    public function updateComplete(Request $request, $id)
+    {
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'city_id' => 'required',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'address' => 'nullable|string|max:255',
+            'zip_code' => 'nullable|string|max:10',
+            'description' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        $store = Store::findOrFail($id);
+        $store->update(array_filter($request->only(['name', 'address', 'zip_code', 'description'])));
+
+        $user = $store->user;
+        $user->update($request->only(['city_id']));
+
+        if ($request->hasFile('logo')) {
+            $imagePath = $request->file('logo')->store('stores', 'public');
+            $store->logo = asset('storage/' . $imagePath);
+            $store->save();
+        }
+
+        if ($request->hasFile('banner')) {
+            $imagePath = $request->file('banner')->store('stores', 'public');
+            $store->banner = asset('storage/' . $imagePath);
+            $store->save();
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Store updated successfully',
+            'data' => $store
+        ], 200);
+    }
 }

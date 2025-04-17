@@ -52,6 +52,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::put('stores/{id}/verified', [StoreController::class, 'markAsVerifiedStore']);
     Route::post('stores/verification', [StoreController::class, 'verifyStore']);
     Route::post('stores/{id}/edit', [StoreController::class, 'update']);
+    Route::post('v2/stores/{id}/edit', [StoreController::class, 'updateComplete']);
     
     Route::get('reservations/{id}/details', [ReservationController::class, 'reservationDetails']);
     Route::get('reservations', [ReservationController::class, 'index']);

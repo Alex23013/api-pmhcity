@@ -36,6 +36,12 @@ class StoreResource extends Resource
                 TextInput::make('description')
                     ->label('Description')
                     ->maxLength(255),
+                TextInput::make('address')
+                    ->label('Address')
+                    ->maxLength(255),
+                TextInput::make('zip_code')
+                    ->label('Zip Code')
+                    ->maxLength(255),
                 TextInput::make('logo')
                     ->label('Logo URL')
                     ->maxLength(255),
@@ -60,6 +66,12 @@ class StoreResource extends Resource
                 ->searchable(),
             TextColumn::make('description')
                 ->label('Description')
+                ->sortable(),
+            TextColumn::make('address')
+                ->label('Address')
+                ->sortable(),
+            TextColumn::make('zip_code')
+                ->label('Zip Code')
                 ->sortable(),
             TextColumn::make('siret')
                 ->label('SIRET'),

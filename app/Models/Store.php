@@ -18,6 +18,8 @@ class Store extends Model
         'logo',
         'banner',
         'description',
+        'address',
+        'zip_code',
     ];
 
     public function user()
