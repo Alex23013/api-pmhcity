@@ -636,6 +636,96 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "editStore v2",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer_token_local}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Seller Store USL",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "lastname",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "seller@yopmail.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "logo",
+									"type": "file",
+									"src": "/home/maria/Desktop/USL_Corporate_vert_logo.png"
+								},
+								{
+									"key": "city_id",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "banner",
+									"type": "file",
+									"src": "/home/maria/Pictures/Screenshots/temperatura_sensor.png"
+								},
+								{
+									"key": "description",
+									"value": "This is the seller's Store",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{local_base_url}}/api/v2/stores/2/edit",
+							"host": [
+								"{{local_base_url}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"stores",
+								"2",
+								"edit"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
