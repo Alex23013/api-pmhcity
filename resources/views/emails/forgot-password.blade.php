@@ -1,16 +1,16 @@
 @component('mail::message')
-# Hello {{ $name }},
+# Bonjour {{ $name }},
 
-You requested a password reset. Click the button below to reset your password:
+Vous avez demandé une réinitialisation de votre mot de passe. Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe :
 
 @component('mail::button', ['url' => $url, 'color' => 'cyan'])
-Reset Password
+Réinitialiser le mot de passe
 @endcomponent
 
-This link will expire in **10 minutes**.
+Ce lien expirera dans **10 minutes**.
 
-If you have any questions, feel free to contact our support team at<br> [support@pmhcity.com](mailto:support@pmhcity.com).
+Si vous avez des questions, n'hésitez pas à contacter notre équipe d'assistance à l'adresse suivante<br> [support@pmhcity.com](mailto:support@pmhcity.com).
 
-Thanks,<br>
-**PMHCity Team**
+Merci,<br>
+**L'équipe de PMHCity**
 @endcomponent

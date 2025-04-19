@@ -1,12 +1,12 @@
 @component('mail::message')
-# Email Verification Code
+# Code de vérification de l'email
 
-Your 6-digit verification code is:
+Votre code de vérification à 6 chiffres est :
 
 **{{ $token }}**
 
-This code will expire in 10 minutes.
+Ce code expirera dans 10 minutes.
 
-Thanks,<br>
-PMHCity Team
+Merci,<br>
+L'équipe de PMHCity
 @endcomponent
