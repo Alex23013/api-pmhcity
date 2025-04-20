@@ -77,6 +77,7 @@ class StoreController extends BaseController
                 'store' => [
                         "logo" => $store->logo,
                         "name" => $store->name,
+                        "description" => $store->description,
                         "phone" => $user->phone,
                         "city" => $user->city->name,
                         "metropole" => $user->city->metropole->name,
