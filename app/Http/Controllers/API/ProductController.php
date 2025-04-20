@@ -152,6 +152,7 @@ class ProductController extends BaseController
             'product_id' => 'required',
             'name' => 'required',
             'description' => 'required',
+            'composition' => 'nullable',
             'user_id' => 'required|exists:users,id',
             'price' => 'required',
             'category_id' => 'required|exists:categories,id',
@@ -171,6 +172,7 @@ class ProductController extends BaseController
         }
         $product->name = $input['name'];
         $product->description = $input['description'];
+        $product->composition = $input['composition']?? null;
         $product->user_id = $input['user_id'];
         $product->price = $input['price'];
         $product->category_id = $input['category_id'];
