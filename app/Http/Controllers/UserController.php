@@ -190,7 +190,7 @@ class UserController extends Controller
         if (!$user->fpt_expires_at || Carbon::now('UTC')->greaterThan(Carbon::parse($user->fpt_expires_at))) {
             return response()->json(['message' => 'Token has expired.'], 403);
         }
-        $user->password = bcrypt($request->new_password);
+        $user->password = bcrypt($request->password);
         $user->forget_password_token = null;
         $user->fpt_expires_at = null;
         $user->save();
