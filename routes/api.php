@@ -20,6 +20,8 @@ use App\Http\Controllers\API\StatusProductController;
 use App\Http\Controllers\API\MaterialController;
 use App\Http\Controllers\API\PhoneTokenController;
 use App\Http\Controllers\API\EmailTokenController;
+use App\Http\Controllers\API\StripeController;
+
 
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\API\StoreController;
@@ -62,6 +64,9 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('/phone/verify', [PhoneTokenController::class, 'verifyTokenInProfile']);
     Route::post('/upload-products', [ProductController::class, 'uploadProductsCSV']);
 });
+
+Route::post('/stripe/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
+Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
 
 Route::post('/phone-tokens/generate', [PhoneTokenController::class, 'generateToken']);
 Route::post('/phone-tokens/verify', [PhoneTokenController::class, 'verifyToken']);
