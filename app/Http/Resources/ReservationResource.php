@@ -16,6 +16,12 @@ class ReservationResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'comment' => $this->comment,
+            'size_id' => $this->size_id,
+            'color_id' => $this->color_id,
+            'buyer_id' => $this->buyer_id,
+            'seller_id' => $this->seller_id,
+            'product_id' => $this->product_id,
             'buyer' => $this->buyer,
             'seller' => $this->seller,
             'product' => new ProductResource($this->product),
