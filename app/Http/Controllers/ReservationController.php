@@ -57,7 +57,7 @@ class ReservationController extends Controller
             'status' => true,
             'message' => 'Reservation details retrieved successfully',
             'data' => [
-                "reservation" => $reservation,
+                "reservation" => new ReservationResource($reservation),
                 "steps" => $reservation->reservationSteps
             ]
         ], 200);
@@ -147,7 +147,7 @@ class ReservationController extends Controller
             'status' => true,
             'message' => "Reservation updated to {$newStatus->name}.",
             'data' => [
-                'reservation' => $reservation,
+                "reservation" => new ReservationResource($reservation),
             ],
         ], 200);
     }
