@@ -101,6 +101,9 @@ class ReservationController extends Controller
         ], 201);
     }
 
+    /**
+     * Update the status of a reservation only to 'accepted' or 'rejected'.
+     */
     public function updateStatus(Request $request)
     {
         // Validate the input
@@ -145,6 +148,54 @@ class ReservationController extends Controller
         return response()->json([
             'status' => true,
             'message' => "Reservation updated to {$newStatus->name}.",
+            'data' => [
+                'reservation' => $reservation,
+            ],
+        ], 200);
+    }
+
+    public function markAsPayed(Request $request)
+    {
+        $request->validate([
+            'reservation_id' => 'required|exists:reservations,id',
+        ]);
+        //TODO: add a token or something to protect this endpoint
+
+        $reservation = Reservation::findOrFail($request->reservation_id);
+
+        // Get the last step of this reservation
+        $lastStep = $reservation->reservationSteps()->latest()->first();
+
+        // Ensure the last status is 'accepted' before marking as payed (optional, adjust as needed)
+        if (!$lastStep || $lastStep->reservationStatus->name !== 'accepted') {
+            return response()->json([
+                'status' => false,
+                'message' => 'The reservation status can only be updated to "payed" from "accepted".',
+            ], 400);
+        }
+
+        // Get the "payed" status (id = 4)
+        $payedStatus = ReservationStatus::find(4);
+        if (!$payedStatus) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Payed status not found.',
+            ], 500);
+        }
+
+        // Create a new reservation step with the new status
+        $reservationStep = $reservation->reservationSteps()->create([
+            'reservation_status_id' => $payedStatus->id,
+        ]);
+
+        // Update the last_status field in the reservation
+        $reservation->update([
+            'last_status' => $payedStatus->name,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Reservation marked as payed.",
             'data' => [
                 'reservation' => $reservation,
             ],
