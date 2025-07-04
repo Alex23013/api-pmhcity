@@ -8,6 +8,7 @@ use App\Models\ReservationStep;
 use App\Models\ReservationStatus;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Resources\ReservationResource;
 
 class ReservationController extends Controller
 {
@@ -25,11 +26,11 @@ class ReservationController extends Controller
                 ->get();
         } else { // role 2 or 3 (sellers)
             $reservations = Reservation::where('seller_id', $user->id)
-                ->with(['buyer', 'seller','product'])
+                ->with(['buyer', 'seller', 'product'])
                 ->latest()
                 ->get();
         }
-
+        $reservations = ReservationResource::collection($reservations);
         return response()->json([
             'status' => true,
             'message' => 'Auth reservations retrieved successfully',
@@ -56,7 +57,7 @@ class ReservationController extends Controller
             'status' => true,
             'message' => 'Reservation details retrieved successfully',
             'data' => [
-                "reservation" => $reservation,
+                "reservation" => new ReservationResource($reservation),
                 "steps" => $reservation->reservationSteps
             ]
         ], 200);
@@ -149,7 +150,7 @@ class ReservationController extends Controller
             'status' => true,
             'message' => "Reservation updated to {$newStatus->name}.",
             'data' => [
-                'reservation' => $reservation,
+                "reservation" => new ReservationResource($reservation),
             ],
         ], 200);
     }
