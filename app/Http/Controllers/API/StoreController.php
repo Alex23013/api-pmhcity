@@ -41,6 +41,7 @@ class StoreController extends BaseController
                         "description" => $store->description,
                         "logo" => $store->logo,
                         "subtitle"=> $category_names_string,
+                        "isVerified" => $store->is_verified,
                     ],
                 ];
             }
