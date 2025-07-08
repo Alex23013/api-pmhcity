@@ -52,7 +52,7 @@ class Product extends Model
 
     public function photoProducts()
     {
-        return $this->hasMany(PhotoProduct::class,'product_id');
+        return $this->hasMany(PhotoProduct::class,'product_id')->orderBy('created_at', 'asc');
     }
 
     public function category()
