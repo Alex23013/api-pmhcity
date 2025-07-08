@@ -188,9 +188,8 @@ class ProductController extends BaseController
 
         // Handle photo uploads
         $photos = ['photo1', 'photo2', 'photo3','photo4', 'photo5', 'photo6'];
-
         $requestPhotoUrls = array_filter($request->only($photos));
-
+        
         // Convert all request URLs to relative paths
         $normalizedRequestUrls = array_map(function($url) {
             if (str_contains($url, '/storage/')) {
@@ -198,15 +197,17 @@ class ProductController extends BaseController
             }
             return $url;
         }, $requestPhotoUrls);
+
         // Delete photos that are not in the request
         foreach ($product->photoProducts as $dbPhoto) {
             if (!in_array($dbPhoto->url, $normalizedRequestUrls)) {
                 $dbPhoto->delete();
             }
         }
+        
         // Add new photos from the request
         foreach ($photos as $photo) {
-            if ($request->has($photo) && $request->input($photo) !== null) {
+            if ($request->has($photo)) {
                 if ($request->hasFile($photo)) {
                     $imagePath = $request->file($photo)->store('product_photos', 'public');
                     // Create PhotoProduct record
