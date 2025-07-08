@@ -67,7 +67,8 @@ Route::middleware('auth:sanctum')->group( function () {
 
 Route::post('/stripe/create-checkout-session', [StripeController::class, 'createCheckoutSession']);
 Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
-Route::post('/reservations/mark-as-payed', [ReservationController::class, 'markAsPayed']); //todo add a midleware or something to protect this endpoint
+// TODO: add a midleware or something to protect this endpoint
+Route::post('/reservations/map', [ReservationController::class, 'markAsPayed']);
 
 Route::post('/phone-tokens/generate', [PhoneTokenController::class, 'generateToken']);
 Route::post('/phone-tokens/verify', [PhoneTokenController::class, 'verifyToken']);
