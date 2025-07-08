@@ -186,22 +186,30 @@ class ProductController extends BaseController
         $product->updated_at = now();
         $product->save();
 
-        $product->photoProducts()->delete();
-
         // Handle photo uploads
         $photos = ['photo1', 'photo2', 'photo3','photo4', 'photo5', 'photo6'];
+        $hasPhoto = false;
         foreach ($photos as $photo) {
-            if ($request->hasFile($photo)) {
-                $imagePath = $request->file($photo)->store('product_photos', 'public');
-
-                // Create PhotoProduct record
-                PhotoProduct::create([
-                    'url' => $imagePath,
-                    'product_id' => $product->id
-                ]);
+            if ($request->has($photo)) {
+                $hasPhoto = true;
             }
         }
-
+        if ($hasPhoto) {
+            foreach ($photos as $photo) {
+                if ($request->hasFile($photo)) {
+                    $imagePath = $request->file($photo)->store('product_photos', 'public');
+                    // Create PhotoProduct record
+                    PhotoProduct::create([
+                        'url' => $imagePath,
+                        'product_id' => $product->id
+                    ]);
+                }
+            }          
+        }else{
+            // Delete all photoProducts if no photo fields are present
+             $product->photoProducts()->delete();
+        }       
+        
         $response = [
             'success' => true,
             'message' => 'Product updated successfully.',
