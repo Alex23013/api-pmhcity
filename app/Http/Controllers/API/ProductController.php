@@ -188,14 +188,25 @@ class ProductController extends BaseController
 
         // Handle photo uploads
         $photos = ['photo1', 'photo2', 'photo3','photo4', 'photo5', 'photo6'];
-        $hasPhoto = false;
-        foreach ($photos as $photo) {
-            if ($request->has($photo)) {
-                $hasPhoto = true;
+
+        $requestPhotoUrls = array_filter($request->only($photos));
+
+        // Convert all request URLs to relative paths
+        $normalizedRequestUrls = array_map(function($url) {
+            if (str_contains($url, '/storage/')) {
+                return substr($url, strpos($url, '/storage/') + strlen('/storage/'));
+            }
+            return $url;
+        }, $requestPhotoUrls);
+        // Delete photos that are not in the request
+        foreach ($product->photoProducts as $dbPhoto) {
+            if (!in_array($dbPhoto->url, $normalizedRequestUrls)) {
+                $dbPhoto->delete();
             }
         }
-        if ($hasPhoto) {
-            foreach ($photos as $photo) {
+        // Add new photos from the request
+        foreach ($photos as $photo) {
+            if ($request->has($photo) && $request->input($photo) !== null) {
                 if ($request->hasFile($photo)) {
                     $imagePath = $request->file($photo)->store('product_photos', 'public');
                     // Create PhotoProduct record
@@ -204,11 +215,8 @@ class ProductController extends BaseController
                         'product_id' => $product->id
                     ]);
                 }
-            }          
-        }else{
-            // Delete all photoProducts if no photo fields are present
-             $product->photoProducts()->delete();
-        }       
+            }
+        }   
         
         $response = [
             'success' => true,
