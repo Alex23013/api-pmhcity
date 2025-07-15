@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 
 use App\Models\Subcategory;
+use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\JsonResponse;
 
@@ -76,22 +77,16 @@ class SubcategoryController extends BaseController
             ], 404);
         }
 
-        $user = $subcategory->user;
-
-        $products = $user->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory', 'photoProducts'])->get();
+        $products = $subcategory->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory', 'photoProducts'])->get();
         
         return response()->json([
             'status' => true,
             'message' => 'Products retrieved successfully.',
             'data' => [
                 'products' => ProductResource::collection($products),
-                'store' => [
-                        "logo" => $subcategory->logo,
-                        "name" => $subcategory->name,
-                        "phone" => $user->phone,
-                        "city" => $user->city->name,
-                        "metropole" => $user->city->metropole->name,
-                        "banner" => $subcategory->banner,
+                'subcategory' => [
+                        "cover_image" => $subcategory->cover_image,
+                        "name" => $subcategory->name
                         ]
                 ]
         ], 200);

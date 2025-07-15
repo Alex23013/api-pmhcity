@@ -84,6 +84,8 @@ Route::post('/reset-password', [UserController::class, 'resetPassword']);
 # Marketplace
 Route::get('stores', [StoreController::class, 'listStores']);
 Route::get('stores/{id}/products', [StoreController::class, 'listProductsByStore']);
+Route::get('subcategories/{id}/products', [SubcategoryController::class, 'listProductsBySubcategory']);
+
 Route::get('/v2/products/{id}', [ProductController::class, 'show']);
 Route::get('/v2/categories', [CategoryController::class, 'index']);
 
