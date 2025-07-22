@@ -9,6 +9,7 @@ use App\Models\Store;
 use App\Models\PhotoProduct;
 use Validator;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductMarketplaceResource;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\JsonResponse;
@@ -16,6 +17,32 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends BaseController
 {
+    public function listTopProducts()
+    {
+        // Get 3 lowest price products from category 1
+        $category1Products = Product::with(['photoProducts', 'brand', 'material', 'status_product', 'category', 'subcategory'])
+            ->where('is_active', true)
+            ->where('category_id', 1)
+            ->orderBy('price', 'asc')
+            ->take(3)
+            ->get();
+
+        // Get 3 lowest price products from category 2
+        $category2Products = Product::with(['photoProducts', 'brand', 'material', 'status_product', 'category', 'subcategory'])
+            ->where('is_active', true)
+            ->where('category_id', 2)
+            ->orderBy('price', 'asc')
+            ->take(3)
+            ->get();
+
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Top products retrieved successfully.',
+            'data' => ProductMarketplaceResource::collection($category1Products->merge($category2Products))
+        ], 200);
+    }
+
     /**
      * Display a listing of the resource.
      *
