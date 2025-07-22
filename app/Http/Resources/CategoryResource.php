@@ -16,13 +16,18 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'cover_image' => $this->cover_image ? (str_contains($this->cover_image, 'https') ? $this->cover_image : asset('storage/' . $this->cover_image)) : null,
-            'subcategories' => $this->subcategories->map(function ($subcategory) {
+            'subcategories' => $this->subcategories
+            ->filter(function ($subcategory) {
+                return $subcategory->cover_image;
+            })
+            ->map(function ($subcategory) {
                 return [
                     'id' => $subcategory->id,
                     'name' => $subcategory->name,
                     'cover_image' => $subcategory->cover_image ? (str_contains($subcategory->cover_image, 'https') ? $subcategory->cover_image : asset('storage/' . $subcategory->cover_image)) : null,
                 ];
-            }),
+            })
+            ->values(),
             'created_at' => $this->created_at->format('d/m/Y'),
             'updated_at' => $this->updated_at->format('d/m/Y'),
         ];

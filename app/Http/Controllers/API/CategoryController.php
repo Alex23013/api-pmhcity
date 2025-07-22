@@ -17,7 +17,13 @@ class CategoryController extends BaseController
     {
         $categories = Category::with(['subcategories' => function ($query) {
             $query->orderBy('id');
-        }])->orderBy('id')->get();
+        }])
+        ->orderBy('id')
+        ->get()
+        ->filter(function ($category) {
+            return !is_null($category->cover_image);
+        })
+        ->values(); 
         return CategoryResource::collection($categories);
     }
 
