@@ -120,7 +120,36 @@ class ReservationController extends Controller
             ], 403);
         }
 
-        $reservation = Reservation::findOrFail($request->reservation_id);
+        if ($user->role_id == 2 || $user->role_id == 3) {
+            // Ensure the user is the seller of the reservation
+            $reservation = Reservation::where('id', $request->reservation_id)
+                ->where('seller_id', $user->id)
+                ->first();
+
+            if (!$reservation) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized. You can only update your own reservations.',
+                ], 403);
+            }
+
+            $store = $user->store;
+            if (!$store) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You must have a store to update reservation status.',
+                ], 403);
+            }
+            if (!$store->address || !$store->zip_code) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'In order to accept a reservation, seller must to complete store info',
+                ], 403);
+            }
+        }else{
+            // only admin can get to this scenario
+            $reservation = Reservation::findOrFail($request->reservation_id);
+        } 
 
         // Get the last step of this reservation
         $lastStep = $reservation->reservationSteps()->latest()->first();
