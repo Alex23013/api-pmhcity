@@ -196,7 +196,7 @@ class StoreController extends BaseController
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'address' => 'nullable|string|max:255',
             'zip_code' => 'nullable|string|max:10',
-            'description' => 'required|string|max:255',
+            'description' => 'required|string|max:150',
         ]);
 
         if ($validator->fails()) {
