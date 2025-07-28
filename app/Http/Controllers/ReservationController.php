@@ -143,7 +143,7 @@ class ReservationController extends Controller
             if (!$store->address || !$store->zip_code) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'In order to accept a reservation, seller must to complete store info',
+                    'message' => 'In order to accept a reservation, complete your profile information with address and zip code.',
                 ], 403);
             }
         }else{
