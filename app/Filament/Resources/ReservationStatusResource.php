@@ -26,6 +26,9 @@ class ReservationStatusResource extends Resource
                 TextInput::make('display_name')
                     ->required()
                     ->maxLength(255),
+                TextInput::make('author')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -36,6 +39,7 @@ class ReservationStatusResource extends Resource
                 TextColumn::make('id')->sortable(),
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('display_name')->searchable(),
+                TextColumn::make('author')->searchable(),
                 TextColumn::make('created_at')->dateTime('d/m/Y'),
             ])
             ->filters([])

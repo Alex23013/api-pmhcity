@@ -10,5 +10,5 @@ class ReservationStatus extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'display_name'];
+    protected $fillable = ['name', 'display_name', 'author'];
 }
