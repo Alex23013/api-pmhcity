@@ -56,6 +56,7 @@ Route::middleware('auth:sanctum')->group( function () {
     
     Route::get('reservations/{id}/details', [ReservationController::class, 'reservationDetails']);
     Route::get('reservations', [ReservationController::class, 'index']);
+    Route::post('reservations/by-status/', [ReservationController::class, 'reservationsByStatus']);
     Route::post('reservations', [ReservationController::class, 'store']);
     Route::post('reservations/update-status', [ReservationController::class, 'updateStatus']);
 

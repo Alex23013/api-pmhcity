@@ -41,6 +41,41 @@ class ReservationController extends Controller
         ], 200);
     }
 
+    public function reservationsByStatus(Request $request)
+    {
+        $request->validate([
+            'status' => 'required|string'
+        ]);
+
+        $user = Auth::user();
+        $auth_role = $user->role_id;
+
+        if ($auth_role == 4) {
+            $reservations = Reservation::where('buyer_id', $user->id)
+                ->where('last_status', $request->status)
+                ->with(['buyer', 'seller', 'product'])
+                ->latest()
+                ->get();
+        } else { // role 2 or 3 (sellers)
+            $reservations = Reservation::where('seller_id', $user->id)
+                ->where('last_status', $request->status)
+                ->with(['buyer', 'seller', 'product'])
+                ->latest()
+                ->get();
+        }
+
+        $reservations = ReservationResource::collection($reservations);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Reservations with status "' . $request->status . '" retrieved successfully',
+            'data' => [
+                "auth_role" => $user->role->name,
+                "reservations" => $reservations
+            ],
+        ], 200);
+    }
+
     public function reservationDetails($id)
     {
         $reservation = Reservation::with('reservationSteps')->find($id);
