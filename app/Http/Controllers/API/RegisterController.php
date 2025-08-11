@@ -44,7 +44,7 @@ class RegisterController extends BaseController
         if (!$phoneToken) {
             return $this->sendError('Phone number is not verified.', ['phone' => 'The provided phone number has not been verified.']);
         }
-   
+        $request->merge(['email' => strtolower($request->email)]);
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
@@ -64,6 +64,7 @@ class RegisterController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
+        $request->merge(['email' => strtolower($request->email)]);
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
@@ -75,22 +76,4 @@ class RegisterController extends BaseController
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         } 
     }
-    /*public function login(Request $request): JsonResponse
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate(); // Ensure the session is refreshed
-            
-            return response()->json([
-                'message' => 'User login successful',
-                'user' => Auth::user(),
-            ]);
-        }
-
-        return response()->json(['error' => 'Unauthorized'], 401);
-    }*/
 }
