@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BrandResource\Pages;
+use Filament\Forms\Components\Select;
 use App\Models\Brand;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -21,6 +22,9 @@ class BrandResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')->required(),
+                Select::make('category_id')
+                    ->relationship('category', 'name')
+                    ->required(),
             ]);
     }
 
@@ -29,6 +33,7 @@ class BrandResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
+                TextColumn::make('category.name')->label('Category')->sortable(),
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('created_at')->dateTime('d/m/Y'),
             ])
