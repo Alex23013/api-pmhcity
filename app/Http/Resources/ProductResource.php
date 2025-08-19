@@ -22,6 +22,10 @@ class ProductResource extends JsonResource
             'pmh_reference_code' => $this->pmh_reference_code,
             'article_code' => $this->article_code,
             'price'=>$this->price,
+            'store'=> $this->user->store ? [
+                'id' => $this->user->store->id,
+                'name' => $this->user->store->name,
+            ] : null,
             'is_active'=>$this->is_active,
             'category' => $this->category ? [
                 'id' => $this->category->id,
