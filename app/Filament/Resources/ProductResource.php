@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\RelationManagers\PhotoProductsRelationManager;
+use App\Filament\Resources\ProductResource\RelationManagers\PhotoProductsRelationManager;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use Dom\Text;
