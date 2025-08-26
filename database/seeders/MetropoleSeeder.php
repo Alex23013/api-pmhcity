@@ -14,7 +14,7 @@ class MetropoleSeeder extends Seeder
      */
     public function run(): void
     {
-        if(app()->environment('local')){
+        if (app()->environment(['local', 'testing'])) {
             DB::table('cities')->truncate();
             DB::table('metropoles')->truncate();
         }
