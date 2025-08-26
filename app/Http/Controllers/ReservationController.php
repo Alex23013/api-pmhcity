@@ -246,4 +246,13 @@ class ReservationController extends Controller
         ], 200);
     }
 
+    public function deleteReservationsBySeller($seller_id)
+    {
+        $deleted = \App\Models\Reservation::where('seller_id', $seller_id)->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => "Deleted $deleted reservations for seller $seller_id."
+        ]);
+    }
 }

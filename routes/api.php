@@ -59,6 +59,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('reservations/by-status/', [ReservationController::class, 'reservationsByStatus']);
     Route::post('reservations', [ReservationController::class, 'store']);
     Route::post('reservations/update-status', [ReservationController::class, 'updateStatus']);
+    Route::delete('seller/{seller_id}/reservations', [ReservationController::class, 'deleteReservationsBySeller']);
 
     Route::post('/phone/verify', [PhoneTokenController::class, 'verifyTokenInProfile']);
     Route::post('/upload-products', [ProductController::class, 'uploadProductsCSV']);
