@@ -80,4 +80,28 @@ class User extends Authenticatable
     {
         return $this->hasOne(Store::class, 'user_id');
     }
+
+    // Reservations the user is selling
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'seller_id');
+    }
+
+    // Transactions (earnings, withdrawals, etc.)
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    // Withdrawals requested by this seller
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
+
+    // Seller’s current balance
+    public function balance()
+    {
+        return $this->transactions()->sum('amount');
+    }
 }
