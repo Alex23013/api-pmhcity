@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Metropole;
 use App\Models\City;
+use Illuminate\Support\Facades\DB;
 
 class MetropoleSeeder extends Seeder
 {
@@ -13,7 +14,10 @@ class MetropoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Metropole "Lille"
+        if(app()->environment('local')){
+            DB::table('cities')->truncate();
+            DB::table('metropoles')->truncate();
+        }
         $metropole = Metropole::create(['name' => 'Lille']);
 
         // Create cities for the metropole

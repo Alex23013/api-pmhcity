@@ -7,6 +7,7 @@ use App\Models\Material;
 use App\Models\Size;
 use App\Models\StatusProduct;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DataProductSeeder extends Seeder
 {
@@ -15,6 +16,9 @@ class DataProductSeeder extends Seeder
      */
     public function run()
     {
+        if(app()->environment('local')){
+            DB::table('brands')->truncate();
+        }
         // Seed Brands
         $brands = [
             'Kiabi', 'Zara', 'H&M', 'Nike', 'Orchestra', 'Tape à l\'œil',
@@ -32,7 +36,9 @@ class DataProductSeeder extends Seeder
         foreach ($brands as $brand) {
             Brand::firstOrCreate(['name' => $brand]);
         }
-
+        if(app()->environment('local')){
+        DB::table('sizes')->truncate();
+        }
         // Seed Sizes
         $sizes = [
             'XXXS / 30 / 2', 'XXS / 32 / 4', 'XS / 34 / 6', 'S / 36 / 8',
@@ -43,13 +49,17 @@ class DataProductSeeder extends Seeder
         foreach ($sizes as $size) {
             Size::firstOrCreate(['name' => $size]);
         }
-
+        if(app()->environment('local')){
+            DB::table('status_products')->truncate();
+        }
         // Seed StatusProduct
         $statusProducts = ['Neuf', 'Très bon état','Bon'];
         foreach ($statusProducts as $status) {
             StatusProduct::firstOrCreate(['name' => $status]);
         }
-
+        if(app()->environment('local')){
+            DB::table('materials')->truncate();
+        }
         // Seed Materials
         $materials = [
             'Acier', 'Acrylique', 'Alpaga', 'Argent', 'Bambou', 'Bois', 'Cachemire', 'Caoutchouc',

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\ReservationStatus;
+use Illuminate\Support\Facades\DB;
 
 class ReservationStatusSeeder extends Seeder
 {
@@ -12,6 +13,9 @@ class ReservationStatusSeeder extends Seeder
      */
     public function run()
     {
+        if(app()->environment('local')){
+            DB::table('reservation_statuses')->truncate();
+        }
         $statuses = [
             ['name' => 'created', 'display_name' => 'Votre réservation a été envoyée au vendeur. Veuillez attendre la confirmation du stock.'],
             ['name' => 'accepted', 'display_name' => 'Votre réservation a été confirmée par le vendeur. Vous pouvez procéder au paiement.'],

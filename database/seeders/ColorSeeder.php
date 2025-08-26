@@ -4,11 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Color;
+use Illuminate\Support\Facades\DB;
 
 class ColorSeeder extends Seeder
 {
     public function run(): void
     {
+        if(app()->environment('local')){
+            DB::table('colors')->truncate();
+        }
         $colors = [
             ['name' => 'Red', 'hex_code' => '#FF0000'],
             ['name' => 'Blue', 'hex_code' => '#0000FF'],
