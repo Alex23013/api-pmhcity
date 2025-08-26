@@ -28,4 +28,27 @@ class Transaction extends Model
     {
         return $this->morphTo();
     }
+
+    // --- Domain helpers ---
+    public static function earning(float $amount, $reference = null, int $userId = null)
+    {
+        return self::create([
+            'user_id'       => $userId ?? ($reference?->user_id ?? null),
+            'type'          => 'earning',
+            'amount'        => $amount,
+            'reference_type'=> $reference ? get_class($reference) : null,
+            'reference_id'  => $reference?->id,
+        ]);
+    }
+
+    public static function withdrawal(float $amount, $reference = null, int $userId = null)
+    {
+        return self::create([
+            'user_id'       => $userId ?? ($reference?->user_id ?? null),
+            'type'          => 'withdrawal',
+            'amount'        => -abs($amount), // always negative
+            'reference_type'=> $reference ? get_class($reference) : null,
+            'reference_id'  => $reference?->id,
+        ]);
+    }
 }
