@@ -13,7 +13,7 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['buyer_id', 'seller_id','product_id', 'last_status','phone','comment', 'size_id', 'quantity'];
+    protected $fillable = ['buyer_id', 'seller_id','product_id', 'last_status','phone','comment', 'size_id', 'quantity','price'];
 
     public function buyer()
     {
@@ -38,5 +38,11 @@ class Reservation extends Model
     public function reservationSteps()
     {
         return $this->hasMany(ReservationStep::class)->select('id', 'created_at', 'reservation_status_id', 'reservation_id')->with('reservationStatus:id,name,display_name,author');
+    }
+
+    // Transactions linked to this reservation
+    public function transactions()
+    {
+        return $this->morphMany(Transaction::class, 'reference');
     }
 }

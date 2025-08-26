@@ -4,12 +4,17 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 use App\Models\Subcategory;
 
 class CategorySeeder extends Seeder
 {
     public function run(): void
     {
+        if(app()->environment('local')){
+            DB::table('subcategories')->truncate();
+            DB::table('categories')->truncate();
+        }
         $categories = [
             'Male' => ['Vêtements', 'Chaussures', 'Accessoires'],
             'Female' => ['Clothing', 'Shoes', 'Bags', 'Accessories'],

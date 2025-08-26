@@ -115,15 +115,17 @@ class ReservationController extends Controller
         }
 
         $product = Product::find($request->product_id);
+        $reservationQuantity =  $request->quantity?? 1;
         // Create reservation
         $reservation = Reservation::create([
             'buyer_id' => $buyer->id,
             'seller_id' => $product->user->id,
             'product_id' => $product->id,
-            'quantity' => $request->quantity??1,
+            'quantity' => $reservationQuantity,
             'comment' => $request->comment?? null,
             'size_id' => $request->size_id?? null,
             'last_status' => 'created', // Default status
+            'price' => $product->price * $reservationQuantity
         ]);
 
         ReservationStep::create([

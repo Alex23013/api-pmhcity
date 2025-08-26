@@ -41,4 +41,18 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function seller(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => 3,
+        ]);
+    }
+
+    public function buyer(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => 4,
+        ]);
+    }
 }
