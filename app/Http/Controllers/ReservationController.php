@@ -30,13 +30,25 @@ class ReservationController extends Controller
                 ->latest()
                 ->get();
         }
-        $reservations = ReservationResource::collection($reservations);
+        $reservationArrays = $reservations->map(function ($reservation) {
+            $array = (new ReservationResource($reservation))->toArray(request());
+            $array['store'] = $reservation->seller && $reservation->seller->store ? [
+                'id' => $reservation->seller->store->id,
+                'name' => $reservation->seller->store->name,
+            ] : null;
+            // Optionally unset the store from seller if you want to avoid exposing it
+            if (isset($array['seller']) && is_array($array['seller'])) {
+                unset($array['seller']['store']);
+            }
+            return $array;
+        })->values();
+
         return response()->json([
             'status' => true,
             'message' => 'Auth reservations retrieved successfully',
             'data' => [
                 "auth_role" => $user->role->name,
-                "reservations" => $reservations
+                "reservations" => $reservationArrays
             ],
         ], 200);
     }
@@ -64,14 +76,25 @@ class ReservationController extends Controller
                 ->get();
         }
 
-        $reservations = ReservationResource::collection($reservations);
+        $reservationArrays = $reservations->map(function ($reservation) {
+            $array = (new ReservationResource($reservation))->toArray(request());
+            $array['store'] = $reservation->seller && $reservation->seller->store ? [
+                'id' => $reservation->seller->store->id,
+                'name' => $reservation->seller->store->name,
+            ] : null;
+            // Optionally unset the store from seller if you want to avoid exposing it
+            if (isset($array['seller']) && is_array($array['seller'])) {
+                unset($array['seller']['store']);
+            }
+            return $array;
+        })->values();
 
         return response()->json([
             'status' => true,
             'message' => 'Reservations with status "' . $request->status . '" retrieved successfully',
             'data' => [
                 "auth_role" => $user->role->name,
-                "reservations" => $reservations
+                "reservations" => $reservationArrays
             ],
         ], 200);
     }
@@ -79,20 +102,24 @@ class ReservationController extends Controller
     public function reservationDetails($id)
     {
         $reservation = Reservation::with('reservationSteps')->find($id);
-        $reservation->product;
-        $reservation->amount = $reservation->quantity * $reservation->product->price;
         if (!$reservation) {
             return response()->json([
                 'status' => false,
                 'message' => 'Reservation not found'
             ], 404);
         }
-
+        // Add store info to the reservation array
+        $reservationArray = (new ReservationResource($reservation))->toArray(request());
+        $reservationArray['store'] = $reservation->seller && $reservation->seller->store ? [
+            'id' => $reservation->seller->store->id,
+            'name' => $reservation->seller->store->name,
+        ] : null;
+        unset($reservation->seller->store);
         return response()->json([
             'status' => true,
             'message' => 'Reservation details retrieved successfully',
             'data' => [
-                "reservation" => new ReservationResource($reservation),
+                "reservation" => $reservationArray,
                 "steps" => $reservation->reservationSteps
             ]
         ], 200);
