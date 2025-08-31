@@ -60,10 +60,14 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('reservations', [ReservationController::class, 'store']);
     Route::post('reservations/update-status', [ReservationController::class, 'updateStatus']);
     Route::delete('seller/{seller_id}/reservations', [ReservationController::class, 'deleteReservationsBySeller']);
+    Route::delete('buyer/{buyer_id}/reservations', [ReservationController::class, 'deleteReservationsByBuyer']);
 
     Route::post('/phone/verify', [PhoneTokenController::class, 'verifyTokenInProfile']);
     Route::post('/upload-products', [ProductController::class, 'uploadProductsCSV']);
 });
+
+//TODO: create an admin middleware and protect this route
+Route::delete('delete/reservations/{password}', [ReservationController::class, 'deleteAllReservations']);
 
 Route::post('/phone-tokens/generate', [PhoneTokenController::class, 'generateToken']);
 Route::post('/phone-tokens/verify', [PhoneTokenController::class, 'verifyToken']);

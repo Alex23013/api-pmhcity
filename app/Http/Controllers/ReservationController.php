@@ -255,4 +255,31 @@ class ReservationController extends Controller
             'message' => "Deleted $deleted reservations for seller $seller_id."
         ]);
     }
+
+    public function deleteReservationsByBuyer($buyer_id)
+    {
+        $deleted = \App\Models\Reservation::where('buyer_id', $buyer_id)->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => "Deleted $deleted reservations for buyer $buyer_id."
+        ]);
+    }
+
+    public function deleteAllReservations($password)
+{
+    if ($password !== env('DELETE_RESERVATIONS_PASSWORD')) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Unauthorized. Invalid password.'
+        ], 403);
+    }
+
+    $deleted = \App\Models\Reservation::query()->delete();
+
+    return response()->json([
+        'status' => true,
+        'message' => "Deleted $deleted reservations from the database."
+    ]);
+}
 }
