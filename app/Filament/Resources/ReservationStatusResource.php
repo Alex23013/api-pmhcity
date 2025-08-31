@@ -15,6 +15,7 @@ class ReservationStatusResource extends Resource
     protected static ?string $model = ReservationStatus::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static ?string $navigationGroup = 'Base Configuration';
 
     public static function form(Forms\Form $form): Forms\Form
     {
