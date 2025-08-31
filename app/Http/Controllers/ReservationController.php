@@ -151,6 +151,7 @@ class ReservationController extends Controller
             'quantity' => $reservationQuantity,
             'comment' => $request->comment?? null,
             'size_id' => $request->size_id?? null,
+            //'color_id' => $request->color_id?? $product->color_id, // to support 1 product more colors
             'last_status' => 'created', // Default status
             'price' => $product->price * $reservationQuantity
         ]);

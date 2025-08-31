@@ -21,8 +21,9 @@ class ReservationStatusSeeder extends Seeder
             ['name' => 'accepted', 'display_name' => 'Votre réservation a été confirmée par le vendeur. Vous pouvez procéder au paiement.'],
             ['name' => 'declined', 'display_name' => 'Malheureusement, le vendeur a refusé votre demande.'],
             ['name' => 'payed', 'display_name' => 'Le paiement a été effectué avec succès.'],
-            ['name' => 'in transit', 'display_name' => 'Votre produit est en transit par le mode de livraison que vous avez choisi.'],
-            ['name' => 'delivered', 'display_name' => 'Votre produit a été livré'],
+            ['name' => 'in_transit', 'display_name' => 'Votre produit est en transit par le mode de livraison que vous avez choisi.'],
+            ['name' => 'delivered', 'display_name' => 'Votre produit a été livré.'],
+            ['name' => 'completed', 'display_name' => 'Votre commande a été complétée avec succès.'],
         ];
 
         foreach ($statuses as $status) {

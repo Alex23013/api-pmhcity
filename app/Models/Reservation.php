@@ -13,7 +13,18 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['buyer_id', 'seller_id','product_id', 'last_status','phone','comment', 'size_id', 'quantity','price'];
+    protected $fillable = [
+        'buyer_id',
+        'seller_id',
+        'product_id',
+        'last_status',
+        'phone',
+        'comment',
+        'size_id',
+        'quantity',
+        'price',
+        //'color_id'// To support 1 product more colors
+    ];
 
     public function buyer()
     {
