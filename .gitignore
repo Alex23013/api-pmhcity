@@ -31,4 +31,3 @@ auth.json
 
 tests/*
 .env.testing
-database/seeders/*
