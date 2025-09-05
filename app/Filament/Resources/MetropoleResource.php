@@ -15,7 +15,7 @@ class MetropoleResource extends Resource
     protected static ?string $model = Metropole::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-map';
-    protected static ?string $navigationGroup = 'Base Configuration';
+    protected static ?string $navigationGroup = 'Settings';
 
     public static function form(Forms\Form $form): Forms\Form
     {
