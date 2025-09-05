@@ -17,7 +17,7 @@ class ReservationResource extends JsonResource
         return [
             'id' => $this->id,
             'comment' => $this->comment,
-            'price' => $this->price,
+            'price' => round($this->price,2),
             'size_id' => $this->size_id,
             'color_id' => $this->color_id,
             'buyer_id' => $this->buyer_id,

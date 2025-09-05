@@ -7,6 +7,7 @@ use App\Models\Reservation;
 use App\Models\ReservationStep;
 use App\Models\ReservationStatus;
 use App\Models\Product;
+use App\Models\Parameter;
 use Illuminate\Http\Request;
 use App\Http\Resources\ReservationResource;
 
@@ -115,12 +116,16 @@ class ReservationController extends Controller
             'name' => $reservation->seller->store->name,
         ] : null;
         unset($reservation->seller->store);
+
+        $deliveryPrice = round(Parameter::where('name', 'pmh_relay_delivery_price')->first()?->value, 2);
         return response()->json([
             'status' => true,
             'message' => 'Reservation details retrieved successfully',
             'data' => [
                 "reservation" => $reservationArray,
-                "steps" => $reservation->reservationSteps
+                "steps" => $reservation->reservationSteps,
+                'deliveryPrice' => $deliveryPrice,
+                'totalPrice' => round($reservation->price + $deliveryPrice, 2)
             ]
         ], 200);
     }
@@ -153,7 +158,7 @@ class ReservationController extends Controller
             'size_id' => $request->size_id?? null,
             //'color_id' => $request->color_id?? $product->color_id, // to support 1 product more colors
             'last_status' => 'created', // Default status
-            'price' => $product->price * $reservationQuantity
+            'price' => round($product->price * $reservationQuantity, 2)
         ]);
 
         ReservationStep::create([
