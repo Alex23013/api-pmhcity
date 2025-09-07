@@ -15,7 +15,7 @@ class StatusProductResource extends Resource
     protected static ?string $model = StatusProduct::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationGroup = 'Base Configuration';
+    protected static ?string $navigationGroup = 'Settings';
 
     public static function form(Forms\Form $form): Forms\Form
     {
