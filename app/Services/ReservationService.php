@@ -6,26 +6,20 @@ use App\Models\ReservationStatus;
 
 class ReservationService
 {
+    public function markAsAccepted(Reservation $reservation){
+        $this->setNewStatus($reservation, 'accepted');
+    }
+
     public function markAsPaid (Reservation $reservation){
-        $lastStep = $reservation->reservationSteps()->latest()->first();
-        if (!$lastStep || $lastStep->reservationStatus->name !== 'accepted') {
-            return response()->json([
-                'status' => false,
-                'message' => 'The reservation status can only be updated from "accepted".',
-            ], 400);
-        }
         $this->setNewStatus($reservation, 'paid');
     }
 
     public function markAsInTransit(Reservation $reservation){
-        $lastStep = $reservation->reservationSteps()->latest()->first();
-        if (!$lastStep || $lastStep->reservationStatus->name !== 'paid') {
-            return response()->json([
-                'status' => false,
-                'message' => 'The reservation status can only be updated from "paid".',
-            ], 400);
-        }
         $this->setNewStatus($reservation, 'in_transit');
+    }
+
+    public function markAsDelivered(Reservation $reservation){
+        $this->setNewStatus($reservation, 'delivered');
     }
 
     public function setNewStatus(Reservation $reservation, $statusName){

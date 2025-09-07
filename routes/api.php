@@ -65,7 +65,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::delete('seller/{seller_id}/reservations', [ReservationController::class, 'deleteReservationsBySeller']);
     Route::delete('buyer/{buyer_id}/reservations', [ReservationController::class, 'deleteReservationsByBuyer']);
 
-    Route::post('my-earnings', [WalletController::class, 'myEarnings']);
+    Route::post('portfolio', [WalletController::class, 'portfolio']);
     Route::post('pay-reservation',[TransactionController::class, 'payReservation']);
 
     Route::post('/phone/verify', [PhoneTokenController::class, 'verifyTokenInProfile']);
