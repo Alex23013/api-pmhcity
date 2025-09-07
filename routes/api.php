@@ -25,6 +25,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\API\StoreController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\StripeController;
 
 Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
@@ -64,11 +65,13 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::delete('seller/{seller_id}/reservations', [ReservationController::class, 'deleteReservationsBySeller']);
     Route::delete('buyer/{buyer_id}/reservations', [ReservationController::class, 'deleteReservationsByBuyer']);
 
-    Route::post('my-earnings', [WalletController::class, 'myEarnings']);
+    Route::post('portfolio', [WalletController::class, 'portfolio']);
     Route::post('pay-reservation',[TransactionController::class, 'payReservation']);
 
     Route::post('/phone/verify', [PhoneTokenController::class, 'verifyTokenInProfile']);
     Route::post('/upload-products', [ProductController::class, 'uploadProductsCSV']);
+
+    Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
 });
 
 //TODO: create an admin middleware and protect this route

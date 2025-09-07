@@ -13,10 +13,10 @@ class TransactionService
     {
         $seller = User::find($reservation->seller_id);
         $saleComissionPercentage = Parameter::where('name', 'sale_comission_percentage')->first();
-        $saleComissionPercentage = $saleComissionPercentage ? ($saleComissionPercentage->value) * 0.01 : 0.025;
+        $saleComissionPercentage = $saleComissionPercentage ? ($saleComissionPercentage->value) * 0.01 : 0.02;
         $pmhSaleComission = $reservation->price * $saleComissionPercentage;
         $amountEarned = $reservation->price - $pmhSaleComission;
-        Transaction::factory()->earning($amountEarned)->create(['user_id' => $seller->id]);
+        Transaction::factory()->earning($amountEarned)->create(['user_id' => $seller->id, 'reference_id' => $reservation->id, 'reference_type' => Reservation::class]);
     }
 
     public function monthlyEarnings($userId, $year, $month)
