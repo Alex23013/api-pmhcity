@@ -51,12 +51,19 @@ class TransactionController extends Controller
         ];
 
         $reservation = Reservation::find($request->reservation_id);
-        /*
+        $lastStep = $reservation->reservationSteps()->latest()->first();
+        if (!$lastStep || $lastStep->reservationStatus->name !== 'accepted') {
+            return response()->json([
+                'status' => false,
+                'message' => 'The reservation status can only be updated from "accepted".',
+            ], 400);
+        }
+        
         $this->transactionService->createEarning($reservation);
         $this->reservationService->markAsPaid($reservation);
         $this->reservationService->markAsInTransit($reservation);
         $this->deliveryService->createDelivery($reservation, $deliveryData);
-        */
+        
         return response()->json([
             'status' => true,
             'message' => 'Reservation paid',
