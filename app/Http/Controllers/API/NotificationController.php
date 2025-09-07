@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Notification;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\NotificationResource;
 use Illuminate\Http\JsonResponse;
    
@@ -19,8 +19,11 @@ class NotificationController extends BaseController
     public function index(): JsonResponse
     {
         $notifications = Notification::all();
-    
-        return $this->sendResponse(NotificationResource::collection($notifications), 'Notifications retrieved successfully.');
+
+        return $this->sendResponse(
+            NotificationResource::collection($notifications)->toArray(request()),
+            'Notifications retrieved successfully.'
+        );
     }
 
     /**
@@ -45,17 +48,18 @@ class NotificationController extends BaseController
         }
    
         $notification = Notification::create($input);
-   
-        return $this->sendResponse(new NotificationResource($notification), 'Notification created successfully.');
-    } 
-   
+        return  $this->sendResponse(
+            (new NotificationResource($notification))->toArray(request()),
+            'Notification retrieved successfully.');
+    }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id): JsonResponse
+    public function show($id)
     {
         $notification = Notification::find($id);
   
@@ -63,7 +67,9 @@ class NotificationController extends BaseController
             return $this->sendError('Notification not found.');
         }
    
-        return $this->sendResponse(new NotificationResource($notification), 'Notification retrieved successfully.');
+        return  $this->sendResponse(
+            (new NotificationResource($notification))->toArray(request()),
+            'Notification retrieved successfully.');
     }
     
     /**
@@ -79,8 +85,8 @@ class NotificationController extends BaseController
    
         $notification->read = true;
         $notification->save();
-   
-        return $this->sendResponse(new NotificationResource($notification), 'Notification marked as read.');
+
+        return $this->sendResponse(data: [], message: 'Notification marked as read.');
     }
    
     /**

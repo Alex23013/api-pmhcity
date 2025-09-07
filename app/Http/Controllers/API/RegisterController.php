@@ -28,10 +28,7 @@ class RegisterController extends BaseController
             'c_password' => 'required|same:password',
             'phone' => 'required|string|max:12',
             'role_id' => 'required|exists:roles,id'
-        ]);
-
-
-   
+        ]);   
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
@@ -64,9 +61,17 @@ class RegisterController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required',
+        ]);   
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
         $request->merge(['email' => strtolower($request->email)]);
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
-            $user = Auth::user(); 
+            $user = User::where('email', $request->email)->first(); 
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
             $success['name'] =  $user->name;
    
