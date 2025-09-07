@@ -254,7 +254,7 @@ class ReservationController extends Controller
 
     public function deleteReservationsBySeller($seller_id)
     {
-        $deleted = \App\Models\Reservation::where('seller_id', $seller_id)->delete();
+        $deleted = Reservation::where('seller_id', $seller_id)->delete();
 
         return response()->json([
             'status' => true,
@@ -264,7 +264,7 @@ class ReservationController extends Controller
 
     public function deleteReservationsByBuyer($buyer_id)
     {
-        $deleted = \App\Models\Reservation::where('buyer_id', $buyer_id)->delete();
+        $deleted = Reservation::where('buyer_id', $buyer_id)->delete();
 
         return response()->json([
             'status' => true,
@@ -273,19 +273,19 @@ class ReservationController extends Controller
     }
 
     public function deleteAllReservations($password)
-{
-    if ($password !== env('DELETE_RESERVATIONS_PASSWORD')) {
+    {
+        if ($password !== env('DELETE_RESERVATIONS_PASSWORD')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized. Invalid password.'
+            ], 403);
+        }
+
+        $deleted = Reservation::query()->delete();
+
         return response()->json([
-            'status' => false,
-            'message' => 'Unauthorized. Invalid password.'
-        ], 403);
+            'status' => true,
+            'message' => "Deleted $deleted reservations from the database."
+        ]);
     }
-
-    $deleted = \App\Models\Reservation::query()->delete();
-
-    return response()->json([
-        'status' => true,
-        'message' => "Deleted $deleted reservations from the database."
-    ]);
-}
 }
