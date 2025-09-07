@@ -42,9 +42,3 @@ class ReservationService
         ]);
     }
 }
-
-
-        //TODO: Define if only paid or also changes to in_transit
-        //TODO: for now we will make to in_transit automatically
-        // move this $this->markAsInTransit($reservation); --> to Reservation Service
-        
