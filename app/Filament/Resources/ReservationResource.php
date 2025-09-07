@@ -27,7 +27,7 @@ class ReservationResource extends Resource
                         'created'   => 'Created',
                         'accepted' => 'Accepted',
                         'declined' => 'Declined',
-                        'payed' => 'Payed',
+                        'paid' => 'Paid',
                         'in_transit' => 'In Transit',
                         'delivered' => 'Delivered',
                     ])
@@ -130,7 +130,7 @@ class ReservationResource extends Resource
                         'created'   => 'Created',
                         'accepted' => 'Accepted',
                         'declined' => 'Declined',
-                        'payed' => 'Payed',
+                        'paid' => 'Paid',
                         'in_transit' => 'In Transit',
                         'delivered' => 'Delivered',
                     ]),
