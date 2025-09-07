@@ -23,6 +23,7 @@ use App\Http\Controllers\API\EmailTokenController;
 
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\API\StoreController;
+use App\Http\Controllers\WalletController;
 
 Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
@@ -61,6 +62,8 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('reservations/update-status', [ReservationController::class, 'updateStatus']);
     Route::delete('seller/{seller_id}/reservations', [ReservationController::class, 'deleteReservationsBySeller']);
     Route::delete('buyer/{buyer_id}/reservations', [ReservationController::class, 'deleteReservationsByBuyer']);
+
+    Route::post('my-earnings', [WalletController::class, 'myEarnings']);
 
     Route::post('/phone/verify', [PhoneTokenController::class, 'verifyTokenInProfile']);
     Route::post('/upload-products', [ProductController::class, 'uploadProductsCSV']);
