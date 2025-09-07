@@ -5,6 +5,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Parameter;
 use App\Models\Reservation;
+use Carbon\Carbon;
 
 class TransactionService
 {
@@ -16,5 +17,16 @@ class TransactionService
         $pmhSaleComission = $reservation->price * $saleComissionPercentage;
         $amountEarned = $reservation->price - $pmhSaleComission;
         Transaction::factory()->earning($amountEarned)->create(['user_id' => $seller->id]);
+    }
+
+    public function monthlyEarnings($userId, $year, $month)
+    {
+        $start = Carbon::create($year, $month, 1)->startOfMonth();
+        $end = Carbon::create($year, $month, 1)->endOfMonth();
+
+        return Transaction::where('user_id', $userId)
+            ->where('type', 'earning')
+            ->whereBetween('created_at', [$start, $end])
+            ->sum('amount');
     }
 }

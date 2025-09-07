@@ -28,7 +28,6 @@ class TransactionController extends Controller
         $validator = Validator::make($request->all(), [
             'reservation_id' => 'required|integer|exists:reservations,id',
             'email' => 'required|string|email|max:255',
-            // TODO: add to reservations table as delivery or create a table delivery
             'delivery_name' => 'required',
             'delivery_phone' => 'required',
             'delivery_address' => 'required',

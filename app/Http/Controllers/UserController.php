@@ -9,9 +9,17 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Mail\ForgotPasswordTokenMail;
 use Illuminate\Support\Facades\Mail;
+use App\Services\TransactionService;
 
 class UserController extends Controller
 {
+    protected $transactionService;
+
+    public function __construct(TransactionService $transactionService)
+    {
+        $this->transactionService = $transactionService;
+    }
+
     public function index()
     {
         $users = User::all();
@@ -43,7 +51,8 @@ class UserController extends Controller
 
         if (in_array($user->role_id, [2, 3])) {
             $user->store;
-            $monthly_earnings = 10.00; // TODO: calculate monthly earnings
+            $now = Carbon::now();
+            $monthly_earnings = $this->transactionService->monthlyEarnings($user->id, $now->year, $now->month);
             if($monthly_earnings > 300){
                 $require_verification = true;
             }else{
