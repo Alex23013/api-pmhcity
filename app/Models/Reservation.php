@@ -57,4 +57,9 @@ class Reservation extends Model
     {
         return $this->morphMany(Transaction::class, 'reference');
     }
+
+    public function delivery()
+    {
+        return $this->hasOne(Delivery::class);
+    }
 }
