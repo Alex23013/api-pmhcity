@@ -70,10 +70,10 @@ class ReservationResource extends Resource
                 Forms\Components\TextInput::make('price')
                     ->numeric()
                     ->required(),
-                
-                Forms\Components\TextInput::make('pin_delivery')
+                // TODO: remove pin_delivery from table reservations and from resources
+                /*Forms\Components\TextInput::make('pin_delivery')
                     ->label('PIN Delivery')
-                    ->maxLength(6),
+                    ->maxLength(6),*/
             ]);
     }
 
@@ -116,9 +116,9 @@ class ReservationResource extends Resource
                     ->money('usd')
                     ->sortable(),
                 
-                Tables\Columns\TextColumn::make('pin_delivery')
+                /*Tables\Columns\TextColumn::make('pin_delivery')
                     ->label('PIN Delivery')
-                    ->limit(6),
+                    ->limit(6),*/
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('d/m/Y H:i')

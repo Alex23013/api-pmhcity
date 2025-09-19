@@ -23,7 +23,7 @@ class Reservation extends Model
         'size_id',
         'quantity',
         'price',
-        'pin_delivery'
+        //'pin_delivery'
         //'color_id'// To support 1 product more colors
     ];
 
