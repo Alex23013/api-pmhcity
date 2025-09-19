@@ -8,8 +8,7 @@ class StripeController extends Controller
 {
     public function createPaymentIntent(Request $request)
     {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
-
+        Stripe::setApiKey(config('services.stripe.secret'));
         try {
             // Create a PaymentIntent
             $paymentIntent = \Stripe\PaymentIntent::create([
