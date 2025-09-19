@@ -32,10 +32,10 @@ class PhoneTokenController extends BaseController
             $phone_number = '+33' . $phone_number;
         }
 
-        if(getenv("TWILIO_MODE") == "prod"){
-            try {
-                $sid = getenv("TWILIO_ACCOUNT_SID");
-                $token = getenv("TWILIO_AUTH_TOKEN");
+        if (config('services.twilio.mode') === 'prod') {
+        try {
+            $sid = config('services.twilio.sid');
+            $token = config('services.twilio.token');
 
                 $twilio = new Client($sid, $token);
 
