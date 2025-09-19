@@ -16,7 +16,14 @@ class TransactionService
         $saleComissionPercentage = $saleComissionPercentage ? ($saleComissionPercentage->value) * 0.01 : 0.02;
         $pmhSaleComission = $reservation->price * $saleComissionPercentage;
         $amountEarned = $reservation->price - $pmhSaleComission;
-        Transaction::factory()->earning($amountEarned)->create(['user_id' => $seller->id, 'reference_id' => $reservation->id, 'reference_type' => Reservation::class]);
+
+        Transaction::create([
+            'user_id' => $seller->id,
+            'type' => 'earning',
+            'amount' => $amountEarned,
+            'reference_id' => $reservation->id,
+            'reference_type' => Reservation::class,
+        ]);
     }
 
     public function monthlyEarnings($userId, $year, $month)
