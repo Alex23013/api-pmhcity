@@ -26,6 +26,7 @@ use App\Http\Controllers\API\StoreController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\ApplicationController;
 
 Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
@@ -72,6 +73,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('/upload-products', [ProductController::class, 'uploadProductsCSV']);
 
     Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
+    Route::resource('applications', ApplicationController::class);
 });
 
 //TODO: create an admin middleware and protect this route
