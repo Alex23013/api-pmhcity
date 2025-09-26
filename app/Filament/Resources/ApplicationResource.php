@@ -63,16 +63,6 @@ class ApplicationResource extends Resource
                         Forms\Components\Textarea::make('admin_notes')
                             ->rows(3)
                             ->nullable(),
-                        Forms\Components\Select::make('category')
-                            ->required()
-                            ->options([
-                                'fashion' => 'Fashion',
-                                'food' => 'Food',
-                                'electronics' => 'Electronics',
-                                'services' => 'Services',
-                                'other' => 'Other',
-                            ])
-                            ->searchable(),
                         Forms\Components\Select::make('status')
                             ->required()
                             ->options([
@@ -123,14 +113,6 @@ class ApplicationResource extends Resource
                         'onboarded' => 'Onboarded',
                         'rejected' => 'Rejected',
                         'completed' => 'Completed',
-                    ]),
-                Tables\Filters\SelectFilter::make('category')
-                    ->options([
-                        'fashion' => 'Fashion',
-                        'food' => 'Food',
-                        'electronics' => 'Electronics',
-                        'services' => 'Services',
-                        'other' => 'Other',
                     ]),
             ])
             ->actions([
