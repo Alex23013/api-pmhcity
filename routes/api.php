@@ -73,7 +73,6 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('/upload-products', [ProductController::class, 'uploadProductsCSV']);
 
     Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
-    Route::resource('applications', ApplicationController::class);
 });
 
 //TODO: create an admin middleware and protect this route
@@ -88,6 +87,7 @@ Route::post('/email-tokens/verify', [EmailTokenController::class, 'verifyToken']
 Route::resource('metropoles', MetropoleController::class);
 Route::get('metropoles/names', [MetropoleController::class, 'listNames']);
 Route::get('metropoles/{id}/cities', [CityController::class, 'getCitiesByMetropole']);
+Route::resource('applications', ApplicationController::class);
 
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
