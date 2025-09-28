@@ -27,14 +27,13 @@ class ApplicationController extends Controller
             'name'             => 'required|string|max:255',
             'lastname'         => 'required|string|max:255',
             'phone'            => 'required|string|max:20',
-            'email'            => 'required|string|email|max:255|unique:applications,email',
+            'email'            => 'required|string|email|max:255',
             'store_name'       => 'required|string|max:255',
             'store_location'   => 'required|string|max:255',
-            'store_url'        => 'nullable|url|max:255',
+            'store_url'        => 'nullable|max:255',
             'store_description'=> 'nullable|string',
             'admin_notes'      => 'nullable|string',
             'category'         => 'required|string|max:255',
-            'status'           => 'in:new,contacted,in_progress,onboarded,rejected,completed',
         ]);
 
         if ($validator->fails()) {
