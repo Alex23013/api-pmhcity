@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ApplicationResource\Pages;
 use App\Models\Application;
+use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -53,6 +54,13 @@ class ApplicationResource extends Resource
                             ->url()
                             ->nullable()
                             ->maxLength(255),
+                        Forms\Components\MultiSelect::make('category')
+                            ->label('Categories')
+                            ->options(Category::all()->pluck('name', 'id'))
+                            ->helperText('Select one or more categories')
+                            ->dehydrateStateUsing(fn ($state) => is_array($state) ? implode(',', $state) : $state)
+                            ->formatStateUsing(fn ($state) => $state ? explode(',', $state) : [])
+                            ->nullable(),
                         Forms\Components\Textarea::make('store_description')
                             ->nullable()
                             ->rows(3),
@@ -89,7 +97,6 @@ class ApplicationResource extends Resource
                 Tables\Columns\TextColumn::make('phone')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('email')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('store_name')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('category')->sortable()->badge(),
                 Tables\Columns\BadgeColumn::make('status')
                     ->colors([
                         'gray' => 'new',
@@ -100,6 +107,12 @@ class ApplicationResource extends Resource
                         'primary' => 'completed',
                     ])
                     ->sortable(),
+                Tables\Columns\BadgeColumn::make('category_names')
+                    ->label('Categories')
+                    ->getStateUsing(fn ($record) => $record->category_names)
+                    ->colors(['primary'])
+                    ->separator(',')
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('d M Y H:i')
                     ->sortable(),
