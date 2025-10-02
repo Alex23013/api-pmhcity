@@ -314,7 +314,7 @@ class ReservationController extends Controller
             ->first();
 
         if ($delivery) {
-            //$this->reservationService->markAsDelivered($delivery->reservation);
+            $this->reservationService->markAsDelivered($delivery->reservation);
             return response()->json([
                 'status' => true,
                 'message' => 'Delivery code is valid.',
