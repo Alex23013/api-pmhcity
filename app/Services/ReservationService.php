@@ -10,6 +10,10 @@ class ReservationService
         $this->setNewStatus($reservation, 'accepted');
     }
 
+    public function markAsDeclined(Reservation $reservation){
+        $this->setNewStatus($reservation, 'declined');
+    }
+
     public function markAsPaid (Reservation $reservation){
         $this->setNewStatus($reservation, 'paid');
     }

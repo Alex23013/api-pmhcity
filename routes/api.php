@@ -73,6 +73,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('/upload-products', [ProductController::class, 'uploadProductsCSV']);
 
     Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
+    Route::post('deliveries/validate', [ReservationController::class, 'validateDeliveryCode']);
 });
 
 //TODO: create an admin middleware and protect this route

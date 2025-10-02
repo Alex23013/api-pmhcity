@@ -8,11 +8,20 @@ use App\Models\ReservationStep;
 use App\Models\ReservationStatus;
 use App\Models\Product;
 use App\Models\Parameter;
+use App\Models\Delivery;
 use Illuminate\Http\Request;
 use App\Http\Resources\ReservationResource;
+use App\Services\ReservationService;
 
 class ReservationController extends Controller
 {
+    protected $reservationService;
+
+    public function __construct(ReservationService $reservationService)
+    {
+        $this->reservationService = $reservationService;
+    }
+
     /**
      * List all reservations of the logged-in user (as a buyer or seller)
      */
@@ -124,8 +133,9 @@ class ReservationController extends Controller
             'data' => [
                 "reservation" => $reservationArray,
                 "steps" => $reservation->reservationSteps,
-                'deliveryPrice' => $deliveryPrice,
-                'totalPrice' => round($reservation->price + $deliveryPrice, 2)
+                "deliveryPrice" => $deliveryPrice,
+                "totalPrice" => round($reservation->price + $deliveryPrice, 2),
+                "deliveryCode" => $reservation->delivery?->delivery_code?? null,
             ]
         ], 200);
     }
@@ -232,16 +242,11 @@ class ReservationController extends Controller
                 'message' => 'The reservation status can only be updated from "created".',
             ], 400);
         }
-
-        // Create a new reservation step with the new status
-        $reservationStep = $reservation->reservationSteps()->create([
-            'reservation_status_id' => $newStatus->id,
-        ]);
-
-        // Update the last_status field in the reservation
-        $reservation->update([
-            'last_status' => $newStatus->name,
-        ]);
+        if($request->new_status == 2){ // accepted
+            $this->reservationService->markAsAccepted($reservation);
+        } elseif($request->new_status == 3){
+            $this->reservationService->markAsDeclined($reservation);
+        }
 
         return response()->json([
             'status' => true,
@@ -287,5 +292,33 @@ class ReservationController extends Controller
             'status' => true,
             'message' => "Deleted $deleted reservations from the database."
         ]);
+    }
+
+    public function validateDeliveryCode(Request $request)
+    {
+        $request->validate([
+            'reservation_id' => 'required|exists:reservations,id',
+            'delivery_code' => 'required|string',
+        ]);
+
+        $delivery = Delivery::where('reservation_id', $request->reservation_id)
+            ->where('delivery_code', $request->delivery_code)
+            ->first();
+
+        if ($delivery) {
+            //$this->reservationService->markAsDelivered($delivery->reservation);
+            return response()->json([
+                'status' => true,
+                'message' => 'Delivery code is valid.',
+                'data' => [
+                    'delivery' => $delivery,
+                ],
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid delivery code.',
+            ], 400);
+        }
     }
 }
