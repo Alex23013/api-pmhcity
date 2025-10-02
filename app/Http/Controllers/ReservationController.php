@@ -127,16 +127,24 @@ class ReservationController extends Controller
         unset($reservation->seller->store);
 
         $deliveryPrice = round(Parameter::where('name', 'pmh_relay_delivery_price')->first()?->value, 2);
+        $user = Auth::user();
+
+        $responseData = [
+            "reservation" => $reservationArray,
+            "steps" => $reservation->reservationSteps,
+            "deliveryPrice" => $deliveryPrice,
+            "totalPrice" => round($reservation->price + $deliveryPrice, 2),
+        ];
+
+        // Only include deliveryCode if user role is 4 (buyer)
+        if ($user && $user->role_id == 4) {
+            $responseData["deliveryCode"] = $reservation->delivery?->delivery_code ?? null;
+        }
+
         return response()->json([
             'status' => true,
             'message' => 'Reservation details retrieved successfully',
-            'data' => [
-                "reservation" => $reservationArray,
-                "steps" => $reservation->reservationSteps,
-                "deliveryPrice" => $deliveryPrice,
-                "totalPrice" => round($reservation->price + $deliveryPrice, 2),
-                "deliveryCode" => $reservation->delivery?->delivery_code?? null,
-            ]
+            'data' => $responseData
         ], 200);
     }
 
