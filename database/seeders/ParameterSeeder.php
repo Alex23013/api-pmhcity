@@ -37,6 +37,12 @@ class ParameterSeeder extends Seeder
                 'display_name' => 'Sale Commission Percentage',
                 'description' => 'The percentage of commission taken from each sale.',
                 'value' => '2.5',
+            ],
+            [
+                'name' => 'marketplace_products_by_category',
+                'display_name' => 'Marketplace Products by Category in Carrousel',
+                'description' => 'Number of products to display per category in the marketplace carrousel.',
+                'value' => '2',
             ]
         ];
 
