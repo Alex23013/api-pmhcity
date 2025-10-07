@@ -40,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
                 //Widgets\AccountWidget::class,
                 //Widgets\FilamentInfoWidget::class,
                 \App\Filament\Widgets\UserRoleDistribution::class,
+                \App\Filament\Widgets\ProductsByCategoryDistribution::class
             ])
             ->middleware([
                 EncryptCookies::class,

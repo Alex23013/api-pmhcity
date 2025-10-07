@@ -6,12 +6,15 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use App\Models\Reservation;
 use App\Models\User;
+use App\Models\Product;
+use App\Models\Store;
 
 class ReservationsOverview extends BaseWidget
 {
     protected function getStats(): array
     {
         return [
+            //Stat::make('Reservations', '')->description('---')->color('gray'),
             Stat::make('Reservations Today', Reservation::whereDate('created_at', today())->count())
                 ->description('New today')
                 ->icon('heroicon-o-calendar')
@@ -25,7 +28,9 @@ class ReservationsOverview extends BaseWidget
                 ->description('All-time')
                 ->icon('heroicon-o-clipboard-document-check')
                 ->color('primary'),
-            
+
+            // Users Section
+            //Stat::make('Users', '')->description('---')->color('gray'),
             Stat::make('Users This Week', User::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count())
                 ->description('Registered this week')
                 ->icon('heroicon-o-user-group')
@@ -41,6 +46,15 @@ class ReservationsOverview extends BaseWidget
                 ->description('All-time')
                 ->icon('heroicon-o-users')
                 ->color('primary'),
+            Stat::make('Total Active Products', Product::where('is_active', true)->count())
+                ->description('Currently active')
+                ->icon('heroicon-o-cube')
+                ->color('info'),
+            
+            Stat::make('Total Verified Stores', Store::where('is_verified', true)->count())
+                ->description('Currently verified')
+                ->icon('heroicon-o-cube')
+                ->color('info'),
         ];
     }
 }
