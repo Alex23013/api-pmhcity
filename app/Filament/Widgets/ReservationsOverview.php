@@ -8,6 +8,7 @@ use App\Models\Reservation;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Store;
+use App\Models\ReservationStep;
 
 class ReservationsOverview extends BaseWidget
 {
@@ -28,6 +29,60 @@ class ReservationsOverview extends BaseWidget
                 ->description('All-time')
                 ->icon('heroicon-o-clipboard-document-check')
                 ->color('primary'),
+            
+            Stat::make('Total Delivered Reservations', Reservation::where('last_status', 'delivered')->count())
+                ->description('Reservations marked as delivered')
+                ->icon('heroicon-o-truck')
+                ->color('success'),
+            
+            Stat::make('Delivered This Week', function () {
+                    // Get all ReservationSteps with status_id=6 and created_at in this week
+                    $deliveredSteps = ReservationStep::where('reservation_status_id', 6)
+                        ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+                        ->get();
+
+                    // Count unique reservations delivered this week
+                    $deliveredCount = $deliveredSteps->pluck('reservation_id')->unique()->count();
+
+                    return $deliveredCount;
+                })
+                ->description('Reservations delivered this week')
+                ->icon('heroicon-o-truck')
+                ->color('success'),
+
+            Stat::make('Average Delivery Time', function () {
+                $deliveredReservations = Reservation::where('last_status', 'delivered')->pluck('id');
+                $totalDelivered = $deliveredReservations->count();
+
+                if ($totalDelivered === 0) {
+                    return 'N/A';
+                }
+
+                $totalTime = 0;
+
+                foreach ($deliveredReservations as $reservationId) {
+                    $orderStep = ReservationStep::where('reservation_id', $reservationId)
+                        ->where('reservation_status_id', 1)
+                        ->orderBy('created_at', 'asc')
+                        ->first();
+
+                    $deliveryStep = ReservationStep::where('reservation_id', $reservationId)
+                        ->where('reservation_status_id', 6)
+                        ->orderBy('created_at', 'asc')
+                        ->first();
+
+                    if ($orderStep && $deliveryStep) {
+                        $diff = $orderStep->created_at->diffInDays($deliveryStep->created_at);
+                        $totalTime += $diff;
+                    }
+                }
+
+                $average = $totalTime / $totalDelivered;
+                return number_format($average, 0) . ' days';
+            })
+            ->description('Avg. time from order to delivery')
+            ->icon('heroicon-o-clock')
+            ->color('warning'),
 
             // Users Section
             //Stat::make('Users', '')->description('---')->color('gray'),
@@ -46,6 +101,9 @@ class ReservationsOverview extends BaseWidget
                 ->description('All-time')
                 ->icon('heroicon-o-users')
                 ->color('primary'),
+
+            // Products Section
+            //Stat::make('Products', '')->description('---')->color('gray'),
             Stat::make('Total Active Products', Product::where('is_active', true)->count())
                 ->description('Currently active')
                 ->icon('heroicon-o-cube')

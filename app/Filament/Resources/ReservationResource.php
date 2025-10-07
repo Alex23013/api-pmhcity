@@ -159,4 +159,11 @@ class ReservationResource extends Resource
             'edit'   => Pages\EditReservation::route('/{record}/edit'),
         ];
     }
+
+    public static function getWidgets(): array
+{
+    return [
+        \App\Filament\Widgets\ReservationsByLastStatus::class,
+    ];
+}
 }
