@@ -24,7 +24,7 @@ class ProductController extends BaseController
         $result = [];
 
         $productsByCategory = Parameter::where('name', 'marketplace_products_by_category')->first()?->value ?? 2;
-
+         $allProducts = collect();
         foreach ($categories as $category) {
             $products = Product::with(['photoProducts', 'brand', 'material', 'status_product', 'category', 'subcategory'])
                 ->where('is_active', true)
@@ -33,15 +33,13 @@ class ProductController extends BaseController
                 ->take($productsByCategory)
                 ->get();
 
-            if ($products->isNotEmpty()) {
-                $result[$category->name] = ProductMarketplaceResource::collection($products);
-            }
+            $allProducts = $allProducts->concat($products);
         }
 
         return response()->json([
             'success' => true,
             'message' => 'Top products per category retrieved successfully.',
-            'data' => $result
+            'data' => ProductMarketplaceResource::collection($allProducts)
         ], 200);
     }
 
