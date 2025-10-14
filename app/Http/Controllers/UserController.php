@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Parameter;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,7 +67,8 @@ class UserController extends Controller
             'data' => [
                 'user' => $user,
                 'monthly_earnings' => $monthly_earnings,
-                'require_verification' => $require_verification
+                'require_verification' => $require_verification,
+                'pmh_city_fee' => Parameter::where('name', 'sale_comission_percentage')->first()->value,
             ]
         ], 200);
     }
