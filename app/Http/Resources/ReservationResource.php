@@ -17,7 +17,8 @@ class ReservationResource extends JsonResource
         return [
             'id' => $this->id,
             'comment' => $this->comment,
-            'price' => round($this->price,2),
+            'price' => round($this->price,2), // reservation price
+            'seller_profit' => $this->transactions->first() ? round($this->transactions->first()->amount,2) : 0, // seller profit after platform fee
             'size_id' => $this->size_id,
             'color_id' => $this->color_id,
             'buyer_id' => $this->buyer_id,
@@ -30,6 +31,7 @@ class ReservationResource extends JsonResource
             'last_status' => $this->last_status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+
         ];
     }
 }
