@@ -62,12 +62,12 @@ class ReservationsOverview extends BaseWidget
 
                 foreach ($deliveredReservations as $reservationId) {
                     $orderStep = ReservationStep::where('reservation_id', $reservationId)
-                        ->where('reservation_status_id', 1)
+                        ->where('reservation_status_id', 5) # in_transit status
                         ->orderBy('created_at', 'asc')
                         ->first();
 
                     $deliveryStep = ReservationStep::where('reservation_id', $reservationId)
-                        ->where('reservation_status_id', 6)
+                        ->where('reservation_status_id', 6) # delivered status
                         ->orderBy('created_at', 'asc')
                         ->first();
 
