@@ -12,6 +12,10 @@ use App\Models\Delivery;
 use Illuminate\Http\Request;
 use App\Http\Resources\ReservationResource;
 use App\Services\ReservationService;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservationDeliveredMail;
+use App\Mail\ReservationAcceptedMail;
+use App\Mail\ReservationDeclinedMail;
 
 class ReservationController extends Controller
 {
@@ -252,8 +256,10 @@ class ReservationController extends Controller
         }
         if($request->new_status == 2){ // accepted
             $this->reservationService->markAsAccepted($reservation);
+            Mail::to($reservation->buyer->email)->send(new ReservationAcceptedMail($reservation, $reservation->buyer));
         } elseif($request->new_status == 3){
             $this->reservationService->markAsDeclined($reservation);
+            Mail::to($reservation->buyer->email)->send(new ReservationDeclinedMail($reservation, $reservation->buyer));
         }
 
         return response()->json([
@@ -315,6 +321,7 @@ class ReservationController extends Controller
 
         if ($delivery) {
             $this->reservationService->markAsDelivered($delivery->reservation);
+            Mail::to($delivery->reservation->buyer->email)->send(new ReservationDeliveredMail($delivery->reservation, $delivery->reservation->buyer));
             return response()->json([
                 'status' => true,
                 'message' => 'Delivery code is valid.',

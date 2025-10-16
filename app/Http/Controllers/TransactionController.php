@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Services\TransactionService;
 use App\Services\ReservationService;
 use App\Services\DeliveryService;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservationPaidMail;
 
 
 class TransactionController extends Controller
@@ -60,6 +62,7 @@ class TransactionController extends Controller
         
         $this->transactionService->createEarning($reservation);
         $this->reservationService->markAsPaid($reservation);
+        Mail::to($request->email)->send(new ReservationPaidMail($reservation));
         $this->reservationService->markAsInTransit($reservation);
         $this->deliveryService->createDelivery($reservation, $deliveryData);
         
