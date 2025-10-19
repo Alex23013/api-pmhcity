@@ -12,8 +12,9 @@ Nous vous confirmons que votre paiement pour la réservation n° **{{ $reservati
 - **Produit :** {{ $reservation->product->name }}
 - **Prix unitaire :** {{ number_format($reservation->product->price, 2) }} €
 - **Quantité :** {{ $reservation->quantity }}
+- **Sous-total :** {{ number_format($reservation->price, 2) }} €
 - **Frais de livraison :** {{ number_format($deliveryPrice, 2) }} €
-- **Total payé :** {{ number_format($reservation->price, 2) }} €
+- **Total payé :** {{ number_format($totalPrice, 2) }} €
 
 ---
 

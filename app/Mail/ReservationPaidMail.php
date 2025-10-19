@@ -22,11 +22,13 @@ class ReservationPaidMail extends Mailable
     public function build()
     {
         $deliveryPrice = round(Parameter::where('name', 'pmh_relay_delivery_price')->first()?->value, 2);
+        $totalPrice = round($this->reservation->price + $deliveryPrice, 2);
         return $this->subject('Confirmation de votre paiement de réservation')
                     ->markdown('emails.reservation-paid')
                     ->with([
                         'reservation' => $this->reservation,
                         'deliveryPrice' => $deliveryPrice,
+                        'totalPrice' => $totalPrice,
                     ]);
     }
 }
