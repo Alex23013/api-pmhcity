@@ -8,6 +8,7 @@ use App\Models\ReservationStep;
 use App\Models\ReservationStatus;
 use App\Models\Product;
 use App\Models\Parameter;
+use App\Models\Transaction;
 use App\Models\Delivery;
 use Illuminate\Http\Request;
 use App\Http\Resources\ReservationResource;
@@ -273,21 +274,45 @@ class ReservationController extends Controller
 
     public function deleteReservationsBySeller($seller_id)
     {
+        // Get all reservation IDs for this seller
+        $reservationIds = Reservation::where('seller_id', $seller_id)->pluck('id');
+
+        // Delete related transactions
+        Transaction::whereIn('reference_id', $reservationIds)
+            ->where('reference_type', Reservation::class)
+            ->delete();
+
+        // Delete related reservation steps
+        ReservationStep::whereIn('reservation_id', $reservationIds)->delete();
+
+        // Delete reservations
         $deleted = Reservation::where('seller_id', $seller_id)->delete();
 
         return response()->json([
             'status' => true,
-            'message' => "Deleted $deleted reservations for seller $seller_id."
+            'message' => "Deleted $deleted reservations and their related transactions and steps for seller $seller_id."
         ]);
     }
 
     public function deleteReservationsByBuyer($buyer_id)
     {
+        // Get all reservation IDs for this buyer
+        $reservationIds = Reservation::where('buyer_id', $buyer_id)->pluck('id');
+
+        // Delete related transactions
+        Transaction::whereIn('reference_id', $reservationIds)
+            ->where('reference_type', Reservation::class)
+            ->delete();
+
+        // Delete related reservation steps
+        ReservationStep::whereIn('reservation_id', $reservationIds)->delete();
+
+        // Delete reservations
         $deleted = Reservation::where('buyer_id', $buyer_id)->delete();
 
         return response()->json([
             'status' => true,
-            'message' => "Deleted $deleted reservations for buyer $buyer_id."
+            'message' => "Deleted $deleted reservations and their related transactions and steps for buyer $buyer_id."
         ]);
     }
 
@@ -300,6 +325,18 @@ class ReservationController extends Controller
             ], 403);
         }
 
+        // Get all reservation IDs before deleting
+        $reservationIds = Reservation::pluck('id');
+
+        // Delete related transactions
+        Transaction::whereIn('reference_id', $reservationIds)
+            ->where('reference_type', Reservation::class)
+            ->delete();
+
+        // Delete related reservation steps
+        ReservationStep::whereIn('reservation_id', $reservationIds)->delete();
+
+        // Delete reservations
         $deleted = Reservation::query()->delete();
 
         return response()->json([

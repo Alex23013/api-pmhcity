@@ -24,6 +24,32 @@ class TransactionService
             'reference_id' => $reservation->id,
             'reference_type' => Reservation::class,
         ]);
+
+        $this->createPmhCityCommisionEarning($reservation, $pmhSaleComission);
+    }
+
+    public function createPmhCityCommisionEarning(Reservation $reservation, $pmhSaleComission)
+    {
+        Transaction::create([
+            'user_id' => 1,
+            'type' => 'pmh_city_commission',
+            'amount' => $pmhSaleComission,
+            'reference_id' => $reservation->id,
+            'reference_type' => Reservation::class,
+        ]);
+    }
+
+    public function createPMHRelayCommisionEarning(Reservation $reservation)
+    {
+        $deliveryPrice = round(Parameter::where('name', 'pmh_relay_delivery_price')->first()?->value, 2);
+
+        Transaction::create([
+            'user_id' => 1,
+            'type' => 'pmh_relay_commission',
+            'amount' => $deliveryPrice,
+            'reference_id' => $reservation->id,
+            'reference_type' => Reservation::class,
+        ]);
     }
 
     public function monthlyEarnings($userId, $year, $month)

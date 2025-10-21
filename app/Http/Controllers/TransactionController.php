@@ -65,6 +65,7 @@ class TransactionController extends Controller
         Mail::to($request->email)->send(new ReservationPaidMail($reservation));
         $this->reservationService->markAsInTransit($reservation);
         $this->deliveryService->createDelivery($reservation, $deliveryData);
+        $this->transactionService->createPMHRelayCommisionEarning($reservation);
         
         return response()->json([
             'status' => true,
