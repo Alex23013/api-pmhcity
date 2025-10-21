@@ -40,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
                 //Widgets\AccountWidget::class,
                 //Widgets\FilamentInfoWidget::class,
                 \App\Filament\Widgets\UserRoleDistribution::class,
+                \App\Filament\Widgets\SellerDistribution::class,
                 \App\Filament\Widgets\ProductsByCategoryDistribution::class,
                 \App\Filament\Widgets\ReservationsByLastStatus::class,
                 
