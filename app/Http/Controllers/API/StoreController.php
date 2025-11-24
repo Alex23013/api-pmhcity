@@ -20,7 +20,7 @@ class StoreController extends BaseController
         $stores = [];
         foreach ($sellers as $seller) {
             // Eager load related models
-            $products = $seller->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory'])->get();
+            $products = $seller->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory'])->where('is_active', true)->get();
 
             // Get unique category IDs from the user's products
             $categoryIds = $products->pluck('category_id')->unique()->toArray();
@@ -68,7 +68,8 @@ class StoreController extends BaseController
 
         $user = $store->user;
 
-        $products = $user->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory', 'photoProducts'])->get();
+        $products = $user->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory', 'photoProducts'])
+        ->where('is_active', true)->get();
         
         return response()->json([
             'status' => true,

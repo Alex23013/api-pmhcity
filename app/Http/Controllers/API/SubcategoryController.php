@@ -77,7 +77,7 @@ class SubcategoryController extends BaseController
             ], 404);
         }
 
-        $products = $subcategory->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory', 'photoProducts'])->get();
+        $products = $subcategory->products()->with(['brand', 'material', 'status_product', 'category', 'subcategory', 'photoProducts'])->where('is_active', true)->get();
         
         return response()->json([
             'status' => true,
